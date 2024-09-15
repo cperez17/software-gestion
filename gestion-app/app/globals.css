@@ -1,22 +1,34 @@
+/* Import Tailwind's base, components, and utilities */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Root theme variables */
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --primary-color: #1e40af; /* Tailwind's indigo-900 */
+  --secondary-color: #fbbf24; /* Tailwind's amber-400 */
+  --border-radius: 0.5rem;
+  --transition-speed: 0.3s;
+  font-family: 'Inter', sans-serif;
 }
 
+/* Dark mode variables */
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-end-rgb: 34, 34, 34;
+    --primary-color: #6366f1; /* Tailwind's indigo-400 */
+    --secondary-color: #f59e0b; /* Tailwind's amber-500 */
   }
 }
 
+/* Base body styling */
 body {
+  font-family: var(--font-family);
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -24,4 +36,88 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+/* Improved typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  color: var(--primary-color);
+}
+
+p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+/* Button Styling */
+button {
+  background-color: var(--primary-color);
+  color: rgb(var(--foreground-rgb));
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Form Styling */
+input, textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgb(var(--background-end-rgb));
+  border-radius: var(--border-radius);
+  background-color: rgb(var(--background-start-rgb));
+  color: rgb(var(--foreground-rgb));
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
+}
+
+input:focus, textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: rgb(var(--foreground-rgb));
+}
+
+/* Footer styling */
+footer {
+  background-color: var(--primary-color);
+  color: rgb(var(--foreground-rgb));
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Utility classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
