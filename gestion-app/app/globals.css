@@ -2,26 +2,114 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Variables para colores temáticos */
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --primary-color: #1E40AF; /* Azul corporativo */
+  --secondary-color: #60A5FA; /* Azul más claro */
+  --background-color: #F3F4F6; /* Gris claro */
+  --text-color: #1F2937; /* Gris oscuro para textos */
+  --accent-color: #FBBF24; /* Color de acento (dorado, amarillo) */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
+/* Fondo general con gradiente suave */
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: linear-gradient(to bottom, #ffffff, #f3f4f6);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Estilo general para títulos */
+h1 {
+  font-size: 2.25rem; /* Tailwind equivalente: text-4xl */
+  margin-bottom: 1rem; /* Tailwind equivalente: mb-4 */
+  font-weight: 700; /* Tailwind equivalente: font-bold */
+  color: var(--primary-color);
+}
+
+h2 {
+  font-size: 1.875rem; /* Tailwind equivalente: text-3xl */
+  margin-bottom: 0.75rem; /* Tailwind equivalente: mb-3 */
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+h3 {
+  font-size: 1.5rem; /* Tailwind equivalente: text-2xl */
+  margin-bottom: 0.5rem; /* Tailwind equivalente: mb-2 */
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* Botones con estilo elegante */
+button {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Enlaces con color de acento */
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--secondary-color);
+}
+
+/* Contenedor con sombra suave */
+.container {
+  max-width: 72rem; /* Tailwind equivalente: max-w-7xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem; /* Tailwind equivalente: p-4 */
+  background-color: var(--background-color);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05); /* Tailwind equivalente: shadow */
+  border-radius: 0.5rem;
+}
+
+/* Formularios con un diseño limpio */
+input, textarea {
+  border: 1px solid #d1d5db; /* Tailwind equivalente: border-gray-300 */
+  border-radius: 0.5rem; /* Tailwind equivalente: rounded-lg */
+  padding: 0.5rem 1rem; /* Tailwind equivalente: px-4 py-2 */
+  width: 100%;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+label {
+  font-size: 0.875rem; /* Tailwind equivalente: text-sm */
+  font-weight: 500; /* Tailwind equivalente: font-medium */
+  margin-bottom: 0.25rem; /* Tailwind equivalente: mb-1 */
+  color: #4b5563; /* Tailwind equivalente: text-gray-700 */
+}
+
+/* Pie de página */
+footer {
+  background-color: var(--primary-color);
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem; /* Tailwind equivalente: py-6 */
+  margin-top: 2.5rem; /* Tailwind equivalente: mt-10 */
+  font-size: 0.875rem; /* Tailwind equivalente: text-sm */
+}
+
+footer a {
+  color: var(--secondary-color);
+}
+
+footer a:hover {
+  color: #fff;
 }
