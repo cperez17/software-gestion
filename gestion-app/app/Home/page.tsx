@@ -30,19 +30,19 @@ const Home = () => {
               <Link href="/Home">Inicio</Link>
             </li>
             <li>
-              <Link href="/">Asignarturas</Link>
+              <Link href="/Home">Asignarturas</Link>
             </li>
             <li>
-              <Link href="/">Planta Docente</Link>
+              <Link href="/Home">Planta Docente</Link>
             </li>
             <li>
-              <Link href="/">Informes</Link>
+              <Link href="/Home">Informes</Link>
             </li>
             <li>
-              <Link href="/">Historico</Link>
+              <Link href="/Home">Historico</Link>
             </li>
             <li>
-              <Link href="/">Perfil</Link>
+              <Link href="/Home">Perfil</Link>
             </li>
           </ul>
         </div>
