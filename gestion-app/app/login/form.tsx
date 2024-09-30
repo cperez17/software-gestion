@@ -20,7 +20,7 @@ export default function Form() {
     });
 
     console.log({ response });
-    
+
     if (!response?.error) {
       router.push('/Home');
       router.refresh();
@@ -31,43 +31,47 @@ export default function Form() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-4 mx-auto max-w-md mt-10 p-6 border rounded-lg shadow-lg"
-    >
-      <h1 className="text-2xl font-bold mb-4">Iniciar Sesión</h1>
-
-      {/* Mostrar mensaje de error si existe */}
-      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-
-      <label htmlFor="email" className="flex flex-col">
-        <span className="text-sm font-medium mb-1">Email</span>
-        <input
-          id="email"
-          name="email"
-          className="border border-gray-300 rounded px-3 py-2 text-black"
-          type="email"
-          required
-          placeholder="Ingresar email"
-        />
-      </label>
-      <label htmlFor="password" className="flex flex-col">
-        <span className="text-sm font-medium mb-1">Contraseña</span>
-        <input
-          id="password"
-          name="password"
-          className="border border-gray-300 rounded px-3 py-2 text-black"
-          type="password"
-          required
-          placeholder="Ingresar contraseña"
-        />
-      </label>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 transition"
+    <div className="login-page flex items-center justify-center min-h-screen bg-gray-100">
+      <form
+        onSubmit={handleSubmit}
+        className="relative flex flex-col gap-4 w-full max-w-md p-6 bg-white bg-opacity-80 rounded-lg shadow-lg z-10"
       >
-        Login
-      </button>
-    </form>
+        <h1 className="text-2xl font-bold mb-4 text-center">Iniciar Sesión</h1>
+
+        {/* Mostrar mensaje de error si existe */}
+        {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
+
+        <label htmlFor="email" className="flex flex-col">
+          <span className="text-sm font-medium mb-1">Email</span>
+          <input
+            id="email"
+            name="email"
+            className="border border-gray-300 rounded px-3 py-2 text-black"
+            type="email"
+            required
+            placeholder="Ingresar email"
+          />
+        </label>
+
+        <label htmlFor="password" className="flex flex-col">
+          <span className="text-sm font-medium mb-1">Contraseña</span>
+          <input
+            id="password"
+            name="password"
+            className="border border-gray-300 rounded px-3 py-2 text-black"
+            type="password"
+            required
+            placeholder="Ingresar contraseña"
+          />
+        </label>
+
+        <button
+          type="submit"
+          className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 transition"
+        >
+          Login
+        </button>
+      </form>
+    </div>
   );
 }
