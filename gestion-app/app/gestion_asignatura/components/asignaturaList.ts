@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 
 export default function AsignaturaList() {
@@ -23,3 +24,4 @@ export default function AsignaturaList() {
     </div>
   );
 }
+*/
