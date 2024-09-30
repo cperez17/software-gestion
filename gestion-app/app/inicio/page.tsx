@@ -2,7 +2,7 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 
 // Convertimos la función a async para futuras operaciones asíncronas
-export default async function Home() {
+export default async function inicio() {
   // Aquí podrías agregar una llamada asíncrona si es necesario en el futuro, como fetch a una API
   // const data = await fetchData();
 
@@ -17,7 +17,7 @@ export default async function Home() {
       {/* Logo */}
       <div className={styles.logo}>
         <Image
-          src="/img/LogoICOC.jpg" // Ruta desde la carpeta public
+          src="/img/LogoICOC.png" // Ruta desde la carpeta public
           alt="Logo"
           width={1000}
           height={500}
