@@ -22,7 +22,7 @@ export default function Form() {
     console.log({ response });
 
     if (!response?.error) {
-      router.push('/Home');
+      router.push('/inicio');
       router.refresh();
     } else {
       // Si hay un error, lo guardamos en el estado

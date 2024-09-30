@@ -9,6 +9,8 @@ RUN npm install tailwindcss
 RUN npm install next-auth
 RUN npm run build
 
+EXPOSE 3004
+
 CMD ["npm","start"]
 
 
