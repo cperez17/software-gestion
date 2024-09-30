@@ -39,7 +39,7 @@ export default function NavBar({ session }: { session: any }) {
             <>
               <Link href="/inicio">Inicio</Link>
               <Link href="/asignaturas">Asignaturas</Link>
-              <Link href="/docentes">Planta Docente</Link>
+              <Link href="/docentes">Planta Docente</Link>            
               <Link href="/informes">Informes</Link>
               <Link href="/historico">Histórico</Link>
               <Link href="#" onClick={handleProfileClick}>
