@@ -1,34 +1,39 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Definir la interfaz para las asignaturas
 interface Asignatura {
-  id: number;
-  nombre: string;
-  codigo: string;
-  semestre: string;
+  course_id: number;
+  course_name: string;
+  code: string;
+  credits: number;
+  semester_id: number;
 }
 
-// Datos de ejemplo para las asignaturas
-const initialAsignaturas: Asignatura[] = [
-  { id: 1, nombre: 'MECÁNICA RACIONAL ESTÁTICA', codigo: 'IOCC109', semestre: 'IV' },
-  { id: 2, nombre: 'TALLER DE INTRODUCCIÓN A LOS PROCESOS CONSTRUCTIVOS', codigo: 'IOCC119', semestre: 'IV' },
-  { id: 3, nombre: 'MATERIALES DE INGENIERÍA CIVIL', codigo: 'IOCC093', semestre: 'III' },
-  { id: 4, nombre: 'TALLER DE DIBUJO EN INGENIERÍA', codigo: 'IOCC104', semestre: 'III' },
-];
-
 export default function Asignaturas() {
-  const [asignaturas, setAsignaturas] = useState<Asignatura[]>(initialAsignaturas);
+  const [asignaturas, setAsignaturas] = useState<Asignatura[]>([]);
   const [selectedAsignatura, setSelectedAsignatura] = useState<Asignatura | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [newAsignatura, setNewAsignatura] = useState<Asignatura>({
-    id: 0,
-    nombre: '',
-    codigo: '',
-    semestre: '',
+    course_id: 0,
+    course_name: '',
+    code: '',
+    credits: 0,
+    semester_id: 0,
   });
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [showGeneralInfo, setShowGeneralInfo] = useState<boolean>(false);
+
+  // Obtener las asignaturas de la base de datos al cargar el componente
+  useEffect(() => {
+    async function fetchAsignaturas() {
+      const res = await fetch('/api/asignaturas');
+      const data = await res.json();
+      setAsignaturas(data);
+    }
+    fetchAsignaturas();
+  }, []);
 
   const handleVerInformacion = (asignatura: Asignatura) => {
     setSelectedAsignatura(asignatura);
@@ -45,7 +50,7 @@ export default function Asignaturas() {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    setNewAsignatura({ id: 0, nombre: '', codigo: '', semestre: '' }); // Resetear el formulario
+    setNewAsignatura({ course_id: 0, course_name: '', code: '', credits: 0, semester_id: 0 }); // Resetear el formulario
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,13 +65,17 @@ export default function Asignaturas() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newAsignatura.nombre && newAsignatura.codigo && newAsignatura.semestre) {
-      const addedAsignatura: Asignatura = {
-        ...newAsignatura,
-        id: asignaturas.length + 1,
-      };
+    if (newAsignatura.course_name && newAsignatura.code && newAsignatura.credits) {
+      const response = await fetch('/api/asignaturas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newAsignatura),
+      });
+      const addedAsignatura = await response.json();
       setAsignaturas((prev) => [...prev, addedAsignatura]);
       handleModalClose();
     } else {
@@ -74,8 +83,11 @@ export default function Asignaturas() {
     }
   };
 
-  const handleEliminarAsignatura = (id: number) => {
-    setAsignaturas(asignaturas.filter(asignatura => asignatura.id !== id));
+  const handleEliminarAsignatura = async (id: number) => {
+    await fetch(`/api/asignaturas/${id}`, {
+      method: 'DELETE',
+    });
+    setAsignaturas(asignaturas.filter(asignatura => asignatura.course_id !== id));
     handleClose(); // Cierra el detalle si la asignatura eliminada era la seleccionada
   };
 
@@ -83,127 +95,165 @@ export default function Asignaturas() {
     setIsEditing(true); // Habilitar el modo de edición
   };
 
-  const handleActualizar = (e: React.FormEvent) => {
+  const handleActualizar = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedAsignatura) {
+      const response = await fetch(`/api/asignaturas/${selectedAsignatura.course_id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(selectedAsignatura),
+      });
+      const updatedAsignatura = await response.json();
       setAsignaturas((prev) =>
         prev.map((asignatura) =>
-          asignatura.id === selectedAsignatura.id ? selectedAsignatura : asignatura
+          asignatura.course_id === updatedAsignatura.course_id ? updatedAsignatura : asignatura
         )
       );
       setIsEditing(false); // Deshabilitar el modo de edición
     }
   };
 
+  const handleVerInfoGeneral = () => {
+    setShowGeneralInfo(true);
+  };
+
+  const handleCloseGeneralInfo = () => {
+    setShowGeneralInfo(false);
+  };
+
   return (
     <div className="layout asignaturas-page">
-      <div className="content">
-        {/* Lista de Asignaturas */}
-        <div className="sidebar">
-          <h2 className="sidebar-title">Asignaturas Disponibles</h2>
-          <button className="add-button" onClick={handleAgregarAsignatura}>
-            Agregar Asignatura
-          </button>
-          <ul className="asignaturas-list">
-            {asignaturas.map((asignatura) => (
-              <li key={asignatura.id} className="asignatura-item">
-                <span className="asignatura-info">
-                  {asignatura.nombre} - {asignatura.codigo} (Semestre: {asignatura.semestre})
-                </span>
-                <button className="info-button" onClick={() => handleVerInformacion(asignatura)}>
-                  Ver Información
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <button onClick={handleVerInfoGeneral}>Ver Info General</button>
 
-        {/* Información Detallada de la Asignatura */}
-        <div className="details">
-          {selectedAsignatura && (
-            <div className="details-card">
-              <h2 className="details-title">Información de {selectedAsignatura.nombre}</h2>
-              {isEditing ? (
-                <form onSubmit={handleActualizar}>
-                  <input
-                    type="text"
-                    name="nombre"
-                    placeholder="Nombre"
-                    value={selectedAsignatura.nombre}
-                    onChange={handleInputChange}
-                    required
-                  />
-                  <input
-                    type="text"
-                    name="codigo"
-                    placeholder="Código"
-                    value={selectedAsignatura.codigo}
-                    onChange={handleInputChange}
-                    required
-                  />
-                  <input
-                    type="text"
-                    name="semestre"
-                    placeholder="Semestre"
-                    value={selectedAsignatura.semestre}
-                    onChange={handleInputChange}
-                    required
-                  />
-                  <button type="submit">Actualizar</button>
-                  <button type="button" onClick={() => setIsEditing(false)}>Cancelar</button>
-                </form>
-              ) : (
-                <>
-                  <p>Código: {selectedAsignatura.codigo}</p>
-                  <p>Semestre: {selectedAsignatura.semestre}</p>
-                  <button className="modify-button" onClick={handleModificar}>Modificar Información</button>
-                  <button className="delete-button" onClick={() => handleEliminarAsignatura(selectedAsignatura.id)}>
-                    Eliminar Asignatura
-                  </button>
-                </>
-              )}
-              <button className="close-button" onClick={handleClose}>Cerrar</button>
+      {showGeneralInfo && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h2>Informe General de Asignaturas</h2>
+              <button className="close-button" onClick={handleCloseGeneralInfo}>X</button>
             </div>
-          )}
+            <div className="modal-content">
+              <div className="grid">
+                {asignaturas.map((asignatura) => (
+                  <div className="grid-item" key={asignatura.course_id}>
+                    <h3>{asignatura.course_name}</h3>
+                    <p>Código: {asignatura.code}</p>
+                    <p>Créditos: {asignatura.credits}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
+      )}
 
-        {/* Modal para agregar asignatura */}
-        {isModalOpen && (
-          <div className="modal-overlay">
-            <div className="modal">
-              <h2>Agregar Nueva Asignatura</h2>
-              <form onSubmit={handleSubmit}>
+      {/* Lista de Asignaturas */}
+      <div className="sidebar">
+        <h2 className="sidebar-title">Asignaturas Disponibles</h2>
+        <button className="add-button" onClick={handleAgregarAsignatura}>
+          Agregar Asignatura
+        </button>
+        <ul className="asignaturas-list">
+          {asignaturas.map((asignatura) => (
+            <li key={asignatura.course_id} className="asignatura-item">
+              <span className="asignatura-info">
+                {asignatura.course_name} - {asignatura.code} - Créditos: {asignatura.credits}
+              </span>
+              <button className="info-button" onClick={() => handleVerInformacion(asignatura)}>
+                Ver Información
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Información Detallada de la Asignatura */}
+      <div className="details">
+        {selectedAsignatura && (
+          <div className="details-card">
+            <h2 className="details-title">Información de {selectedAsignatura.course_name}</h2>
+            {isEditing ? (
+              <form onSubmit={handleActualizar}>
                 <input
                   type="text"
-                  name="nombre"
+                  name="course_name"
                   placeholder="Nombre"
-                  value={newAsignatura.nombre}
+                  value={selectedAsignatura.course_name}
                   onChange={handleInputChange}
                   required
                 />
                 <input
                   type="text"
-                  name="codigo"
+                  name="code"
                   placeholder="Código"
-                  value={newAsignatura.codigo}
+                  value={selectedAsignatura.code}
                   onChange={handleInputChange}
                   required
                 />
                 <input
-                  type="text"
-                  name="semestre"
-                  placeholder="Semestre"
-                  value={newAsignatura.semestre}
+                  type="number"
+                  name="credits"
+                  placeholder="Créditos"
+                  value={selectedAsignatura.credits}
                   onChange={handleInputChange}
                   required
                 />
-                <button type="submit">Agregar</button>
-                <button type="button" onClick={handleModalClose}>Cerrar</button>
+                <button type="submit">Actualizar</button>
+                <button type="button" onClick={() => setIsEditing(false)}>Cancelar</button>
               </form>
-            </div>
+            ) : (
+              <>
+                <p>Código: {selectedAsignatura.code}</p>
+                <p>Créditos: {selectedAsignatura.credits}</p>
+                <button className="modify-button" onClick={handleModificar}>Modificar Información</button>
+                <button className="delete-button" onClick={() => handleEliminarAsignatura(selectedAsignatura.course_id)}>
+                  Eliminar Asignatura
+                </button>
+              </>
+            )}
+            <button className="close-button" onClick={handleClose}>Cerrar</button>
           </div>
         )}
       </div>
+
+      {/* Modal para agregar asignatura */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Agregar Nueva Asignatura</h2>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="course_name"
+                placeholder="Nombre"
+                value={newAsignatura.course_name}
+                onChange={handleInputChange}
+                required
+              />
+              <input
+                type="text"
+                name="code"
+                placeholder="Código"
+                value={newAsignatura.code}
+                onChange={handleInputChange}
+                required
+              />
+              <input
+                type="number"
+                name="credits"
+                placeholder="Créditos"
+                value={newAsignatura.credits}
+                onChange={handleInputChange}
+                required
+              />
+              <button type="submit">Agregar</button>
+              <button type="button" onClick={handleModalClose}>Cerrar</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
