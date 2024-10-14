@@ -96,24 +96,26 @@ export default function Asignaturas() {
   };
 
   const handleActualizar = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (selectedAsignatura) {
-      const response = await fetch(`/api/asignaturas/${selectedAsignatura.course_id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(selectedAsignatura),
-      });
-      const updatedAsignatura = await response.json();
-      setAsignaturas((prev) =>
-        prev.map((asignatura) =>
-          asignatura.course_id === updatedAsignatura.course_id ? updatedAsignatura : asignatura
-        )
-      );
-      setIsEditing(false); // Deshabilitar el modo de edición
-    }
+      e.preventDefault();
+      if (selectedAsignatura) {
+          const response = await fetch(`/api/asignaturas`, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(selectedAsignatura),
+          });
+  
+          const updatedAsignatura = await response.json();
+          setAsignaturas((prev) =>
+              prev.map((asignatura) =>
+                  asignatura.course_id === updatedAsignatura.course_id ? updatedAsignatura : asignatura
+              )
+          );
+          setIsEditing(false); 
+      }
   };
+  
 
   const handleVerInfoGeneral = () => {
     setShowGeneralInfo(true);
