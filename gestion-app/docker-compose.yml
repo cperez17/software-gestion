@@ -1,7 +1,25 @@
+version: '3.8' # Versión de Docker Compose
+
 services:
+  db: # Este es el servicio de PostgreSQL
+    image: postgres:latest # Imagen oficial de PostgreSQL
+    container_name: postgres_container # Nombre del contenedor
+    environment: 
+      POSTGRES_USER: postgres # Usuario por defecto
+      POSTGRES_PASSWORD: jera123 # Contraseña por defecto
+      POSTGRES_DB: "soft-tech" # Nombre de la base de datos a crear
+    ports:
+      - "5432:5432" # Mapea el puerto 5432 del contenedor al host
+    volumes: 
+      - postgres_data:/var/lib/postgresql/data # Persistencia de datos
+
   nextapp:
     container_name: nextapp
-    image: nextapp
     build: .
     ports:
-      - "3004:3004"
+      - "3004:3004" # Mapea el puerto 3004 del contenedor al host
+    depends_on:
+      - db # Asegúrate de que db esté listo antes de iniciar nextapp
+
+volumes:
+  postgres_data: # Volumen para persistir datos de PostgreSQL
