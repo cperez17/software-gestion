@@ -52,7 +52,6 @@ export default function Docentes() {
   };
 
   const isFormValid = () => {
-    // Verificar que todos los campos, excepto 'status', estén completos
     return newDocente.first_name.trim() !== '' &&
            newDocente.last_name.trim() !== '' &&
            newDocente.email.trim() !== '' &&
@@ -148,7 +147,7 @@ export default function Docentes() {
     setNewDocente(docente);
     setIsEditing(true);
     setIsModalOpen(true);
-    setIsInfoModalOpen(false); // Cerrar el modal de información al abrir el de edición
+    setIsInfoModalOpen(false);
   };
 
   const handleDeleteDocente = async (id: number) => {
@@ -179,6 +178,96 @@ export default function Docentes() {
 
   return (
     <div className="layout docentes-page">
+      <style>{`
+        .layout {
+          font-family: Arial, sans-serif;
+          margin: 20px;
+        }
+        .add-docente-btn {
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          cursor: pointer;
+          border-radius: 5px;
+          margin-bottom: 20px;
+        }
+        .search-bar {
+          margin-bottom: 20px;
+        }
+        .search-bar input {
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          width: 300px;
+        }
+        .docentes-container {
+          display: flex;
+          justify-content: space-between;
+        }
+        .docentes-column {
+          width: 48%;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          padding: 10px;
+          background-color: #f9f9f9;
+        }
+        .docentes-list {
+          list-style-type: none;
+          padding: 0;
+        }
+        .docente-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px 0;
+          border-bottom: 1px solid #ccc;
+        }
+        .docente-item:last-child {
+          border-bottom: none;
+        }
+        .docente-info {
+          font-weight: bold;
+        }
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.7);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .modal {
+          background-color: white;
+          padding: 20px;
+          border-radius: 8px;
+          width: 400px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal h2 {
+          margin: 0 0 15px;
+        }
+        .modal input, .modal button {
+          width: 100%;
+          padding: 10px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+        }
+        .modal button {
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          cursor: pointer;
+        }
+        .modal button:hover {
+          background-color: #45a049;
+        }
+      `}</style>
+
       <button className="add-docente-btn" onClick={handleAgregarDocente}>Agregar Docente</button>
 
       <div className="search-bar">
