@@ -12,6 +12,7 @@ interface Docente {
   rut_login?: string;
   password?: string;
   contract?: string;
+  status?: boolean | null;
 }
 
 export default function Docentes() {
@@ -26,10 +27,12 @@ export default function Docentes() {
     rut_login: '',
     password: '',
     contract: '',
+    status: true,
   });
-  const [searchTerm, setSearchTerm] = useState<string>('');  // Estado para el buscador
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchDocentes() {
@@ -41,23 +44,59 @@ export default function Docentes() {
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setNewDocente((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setNewDocente((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const isFormValid = () => {
+    // Verificar que todos los campos, excepto 'status', estén completos
+    return newDocente.first_name.trim() !== '' &&
+           newDocente.last_name.trim() !== '' &&
+           newDocente.email.trim() !== '' &&
+           newDocente.max_credits > 0 &&
+           newDocente.phone_number?.trim() !== '' &&
+           newDocente.rut_login?.trim() !== '' &&
+           newDocente.password?.trim() !== '' &&
+           newDocente.contract?.trim() !== '';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newDocente.first_name && newDocente.last_name && newDocente.email && newDocente.max_credits) {
-      const response = await fetch('/api/docentes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newDocente),
-      });
-      const addedDocente = await response.json();
-      setDocentes((prev) => [...prev, addedDocente]);
+    if (isFormValid()) {
+      if (isEditing) {
+        const response = await fetch(`/api/docentes?id=${newDocente.teacher_id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newDocente),
+        });
+
+        if (response.ok) {
+          const updatedDocente = await response.json();
+          setDocentes((prev) =>
+            prev.map((docente) => (docente.teacher_id === updatedDocente.teacher_id ? updatedDocente : docente))
+          );
+          alert('Docente actualizado exitosamente');
+        } else {
+          alert('Error al actualizar el docente');
+        }
+      } else {
+        const response = await fetch('/api/docentes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newDocente),
+        });
+        const addedDocente = await response.json();
+        setDocentes((prev) => [...prev, addedDocente]);
+      }
       setIsModalOpen(false);
+      setIsEditing(false);
       setNewDocente({
         first_name: '',
         last_name: '',
@@ -67,14 +106,16 @@ export default function Docentes() {
         rut_login: '',
         password: '',
         contract: '',
+        status: true,
       });
     } else {
-      alert("Por favor, completa todos los campos obligatorios.");
+      alert("Por favor, completa todos los campos obligatorios sin espacios en blanco.");
     }
   };
 
   const handleAgregarDocente = () => {
     setIsModalOpen(true);
+    setIsEditing(false);
   };
 
   const handleModalClose = () => {
@@ -88,7 +129,9 @@ export default function Docentes() {
       rut_login: '',
       password: '',
       contract: '',
+      status: true,
     });
+    setIsEditing(false);
   };
 
   const handleVerInfo = (docente: Docente) => {
@@ -101,7 +144,13 @@ export default function Docentes() {
     setSelectedDocente(null);
   };
 
-  // Eliminar docente
+  const handleEditDocente = (docente: Docente) => {
+    setNewDocente(docente);
+    setIsEditing(true);
+    setIsModalOpen(true);
+    setIsInfoModalOpen(false); // Cerrar el modal de información al abrir el de edición
+  };
+
   const handleDeleteDocente = async (id: number) => {
     const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar este docente?');
     if (confirmDelete) {
@@ -112,7 +161,7 @@ export default function Docentes() {
 
         if (response.ok) {
           setDocentes((prevDocentes) => prevDocentes.filter(docente => docente.teacher_id !== id));
-          setIsInfoModalOpen(false); // Cierra el modal
+          setIsInfoModalOpen(false);
           alert('Docente eliminado exitosamente');
         } else {
           alert('Error al eliminar el docente');
@@ -124,7 +173,6 @@ export default function Docentes() {
     }
   };
 
-  // Filtro de búsqueda
   const filteredDocentes = docentes.filter((docente) =>
     `${docente.first_name} ${docente.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -133,7 +181,6 @@ export default function Docentes() {
     <div className="layout docentes-page">
       <button className="add-docente-btn" onClick={handleAgregarDocente}>Agregar Docente</button>
 
-      {/* Input de búsqueda */}
       <div className="search-bar">
         <input
           type="text"
@@ -143,26 +190,44 @@ export default function Docentes() {
         />
       </div>
 
-      {/* Lista de Docentes */}
-      <div className="sidebar">
-        <h2 className="sidebar-title">Docentes Disponibles</h2>
-        <ul className="docentes-list">
-          {filteredDocentes.map((docente, index) => (
-            <li key={index} className="docente-item">
-              <span className="docente-info">
-                {docente.first_name} {docente.last_name}
-              </span>
-              <button onClick={() => handleVerInfo(docente)}>Ver Información</button>
-            </li>
-          ))}
-        </ul>
+      <div className="docentes-container">
+        <div className="docentes-column">
+          <h2>Docentes Activos</h2>
+          <ul className="docentes-list">
+            {filteredDocentes
+              .filter((docente) => docente.status === true)
+              .map((docente, index) => (
+                <li key={index} className="docente-item">
+                  <span className="docente-info">
+                    {docente.first_name} {docente.last_name}
+                  </span>
+                  <button onClick={() => handleVerInfo(docente)}>Ver Información</button>
+                </li>
+              ))}
+          </ul>
+        </div>
+
+        <div className="docentes-column">
+          <h2>Docentes Inactivos</h2>
+          <ul className="docentes-list">
+            {filteredDocentes
+              .filter((docente) => docente.status === null || docente.status === false)
+              .map((docente, index) => (
+                <li key={index} className="docente-item">
+                  <span className="docente-info">
+                    {docente.first_name} {docente.last_name}
+                  </span>
+                  <button onClick={() => handleVerInfo(docente)}>Ver Información</button>
+                </li>
+              ))}
+          </ul>
+        </div>
       </div>
 
-      {/* Modal para agregar docente */}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>Agregar Nuevo Docente</h2>
+            <h2>{isEditing ? 'Modificar Docente' : 'Agregar Nuevo Docente'}</h2>
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -224,26 +289,35 @@ export default function Docentes() {
                 value={newDocente.contract}
                 onChange={handleInputChange}
               />
-              <button type="submit">Agregar</button>
-              <button type="button" onClick={handleModalClose}>Cerrar</button>
+              <label>
+                Activo:
+                <input
+                  type="checkbox"
+                  name="status"
+                  checked={newDocente.status || false}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <button type="submit">{isEditing ? 'Guardar Cambios' : 'Agregar Docente'}</button>
+              <button type="button" onClick={handleModalClose}>Cancelar</button>
             </form>
           </div>
         </div>
       )}
 
-      {/* Modal para ver información de docente con el botón de eliminar */}
       {isInfoModalOpen && selectedDocente && (
         <div className="modal-overlay">
           <div className="modal">
             <h2>Información del Docente</h2>
-            <p><strong>Nombre:</strong> {selectedDocente.first_name} {selectedDocente.last_name}</p>
-            <p><strong>Email:</strong> {selectedDocente.email}</p>
-            <p><strong>Número de Celular:</strong> {selectedDocente.phone_number}</p>
-            <p><strong>Créditos Máximos:</strong> {selectedDocente.max_credits}</p>
-            <p><strong>RUT:</strong> {selectedDocente.rut_login}</p>
-            <p><strong>Contraseña:</strong> {selectedDocente.password}</p>
-            <p><strong>Contrato:</strong> {selectedDocente.contract}</p>
-            <button onClick={() => handleDeleteDocente(selectedDocente.teacher_id!)}>Eliminar Docente</button>
+            <p>Nombre: {selectedDocente.first_name} {selectedDocente.last_name}</p>
+            <p>Email: {selectedDocente.email}</p>
+            <p>Teléfono: {selectedDocente.phone_number}</p>
+            <p>Créditos Máximos: {selectedDocente.max_credits}</p>
+            <p>RUT: {selectedDocente.rut_login}</p>
+            <p>Contrato: {selectedDocente.contract}</p>
+            <p>Estado: {selectedDocente.status ? "Activo" : "Inactivo"}</p>
+            <button onClick={() => handleEditDocente(selectedDocente)}>Editar</button>
+            <button onClick={() => handleDeleteDocente(selectedDocente.teacher_id!)}>Eliminar</button>
             <button onClick={handleInfoModalClose}>Cerrar</button>
           </div>
         </div>

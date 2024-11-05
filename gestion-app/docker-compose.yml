@@ -6,7 +6,7 @@ services:
     container_name: postgres_container # Nombre del contenedor
     environment: 
       POSTGRES_USER: postgres # Usuario por defecto
-      POSTGRES_PASSWORD: evaevaeva2 # Contraseña por defecto
+      POSTGRES_PASSWORD: jera123 # Contraseña por defecto
       POSTGRES_DB: "soft-tech" # Nombre de la base de datos a crear
     ports:
       - "5432:5432" # Mapea el puerto 5432 del contenedor al host
