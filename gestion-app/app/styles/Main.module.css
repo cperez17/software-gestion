@@ -1,69 +1,76 @@
+.topBar p {
+  margin-bottom: 0;
+  color: #ffffff;
+  font-weight: bold;
+  padding-bottom: 1px;
+}
 
-.topBar p { 
-    margin-bottom: 0;
-    color: #ffffff;
-   font-weight: bold;
-   padding-bottom: 1px;
-   }
- .topBar {
-   background-color: #000000;
-   color: #ffffff; 
-   padding-right: 500px;
-   text-align: right;
-   font-size: 14px;
- }
- 
- .navbar {
-   background-color: #5a5a5a; 
-   padding: 10px;
-   padding-right: 100px;
-   text-align: left;
-   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); }
- 
- .navbar ul {
-   list-style: none;
-   margin: 10;
-   padding: 10;
-   display: flex;
-   justify-content: flex-end;
- }
- 
- .navbar li {
-   margin-right: 20px;
- }
- 
- .navbar li a {
-   color: #000000;
-   text-decoration: none;
-   font-weight: bold;
- }
- 
- .container {
-   background-color: #000000;
-   min-height: 100vh; 
-   padding: 0; 
- }
- .logo {
-   display: grid;
-   background-color: #ffffff;
-   justify-items: center;
- }
- .titleBar {
-   background-color: #ffffff; 
-   text-align: center;
-   padding-bottom: 10px;
- 
- }
- 
- .titleBar h1 {
-   font-size: 70px; /* Tamaño grande del texto */
-   color: #000000; /* Color del texto, celeste brillante */
-   margin: 0; /* Elimina el margen por defecto del h1 */
-   font-weight: bold;
-   background-color: #4a93a5;
- }
- 
- /* Estilo del logo en el contenedor */
- .logo img {
-   opacity: 0.4; /* Ajusta la opacidad del logo (0 es completamente transparente, 1 es completamente opaco) */
- }
+.topBar {
+  background-color: #000000;
+  color: #ffffff;
+  padding-right: 500px;
+  text-align: right;
+  font-size: 14px;
+}
+
+.navbar {
+  background-color: #5a5a5a;
+  padding: 10px;
+  padding-right: 100px;
+  text-align: left;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.navbar ul {
+  list-style: none;
+  margin: 10;
+  padding: 10;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navbar li {
+  margin-right: 20px;
+}
+
+.navbar li a {
+  color: #000000;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.container {
+  background-color: #000000;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.logo {
+  display: grid;
+  background-color: #ffffff;
+  justify-items: center;
+}
+
+.titleBar {
+  background-color: #ffffff;
+  text-align: center;
+  padding-bottom: 10px;
+
+}
+
+.titleBar h1 {
+  font-size: 70px;
+  /* Tamaño grande del texto */
+  color: #000000;
+  /* Color del texto, celeste brillante */
+  margin: 0;
+  /* Elimina el margen por defecto del h1 */
+  font-weight: bold;
+  background-color: #4a93a5;
+}
+
+/* Estilo del logo en el contenedor */
+.logo img {
+  opacity: 0.4;
+  /* Ajusta la opacidad del logo (0 es completamente transparente, 1 es completamente opaco) */
+}
