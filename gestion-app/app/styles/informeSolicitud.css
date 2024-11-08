@@ -1,0 +1,57 @@
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin-top: 20px;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #000;
+}
+
+.courseSection {
+    margin-bottom: 20px; /* Espaciado entre secciones de curso */
+    width: 100%; /* O ajusta según el diseño que necesites */
+    max-width: 800px; /* Limita el ancho máximo */
+}
+
+
+.codeRow {
+    text-align: center; /* Centra el texto del código */
+    font-weight: bold; /* Puede hacer que el encabezado sea más destacado */
+}
+
+.code {
+    font-size: 1.2em;
+}
+
+.table {
+    width: 100%;
+    margin-top: 5px;
+}
+
+.header {
+    font-weight: bold;
+    text-align: left;
+    padding: 8px;
+    font-size: 13px;
+    border-bottom: 2px solid black;
+}
+
+.cell {
+    padding: 8px;
+    border-top: 1px solid black;
+    font-size: 13px;
+}
+.button {
+    margin-top: 20px; /* Espacemento superior */
+    padding: 10px 20px; /* Espacemento interno del botón */
+    background-color: #4CAF50; /* Color de fondo */
+    color: white; /* Color de texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambio de cursor */
+}
+
+.button:hover {
+    background-color: #45a049; /* Color al pasar el mouse */
+}
