@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-
+import "./estilos.css";
 // Definir la interfaz para las asignaturas
 interface Asignatura {
   course_id: number;
@@ -13,6 +13,7 @@ interface Asignatura {
 
 export default function Asignaturas() {
   const [asignaturas, setAsignaturas] = useState<Asignatura[]>([]);
+  const [filteredAsignaturas, setFilteredAsignaturas] = useState<Asignatura[]>([]);
   const [selectedAsignatura, setSelectedAsignatura] = useState<Asignatura | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [newAsignatura, setNewAsignatura] = useState<Asignatura>({
@@ -24,6 +25,8 @@ export default function Asignaturas() {
   });
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [showGeneralInfo, setShowGeneralInfo] = useState<boolean>(false);
+  const [selectedSemester, setSelectedSemester] = useState<number | null>(null); // Nuevo estado para el filtro de semestre
+
 
   // Obtener las asignaturas de la base de datos al cargar el componente
   useEffect(() => {
@@ -31,6 +34,7 @@ export default function Asignaturas() {
       const res = await fetch('/api/asignaturas');
       const data = await res.json();
       setAsignaturas(data);
+      setFilteredAsignaturas(data); // Inicialmente mostrar todas las asignaturas
     }
     fetchAsignaturas();
   }, []);
@@ -39,7 +43,15 @@ export default function Asignaturas() {
     setSelectedAsignatura(asignatura);
     setIsEditing(false); // Resetear el estado de edición al ver información
   };
-
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const semester = parseInt(e.target.value);
+    setSelectedSemester(semester);
+    if (semester) {
+      setFilteredAsignaturas(asignaturas.filter(asignatura => asignatura.semester_id === 1));
+    } else {
+      setFilteredAsignaturas(asignaturas); // Mostrar todas si no hay un semestre seleccionado
+    }
+  };
   const handleClose = () => {
     setSelectedAsignatura(null);
   };
@@ -127,6 +139,14 @@ export default function Asignaturas() {
 
   return (
     <div className="layout asignaturas-page">
+      {/* Filtro por semestre */}
+      <label htmlFor="semester-filter">Filtrar por Semestre:</label>
+      <select id="semester-filter" className="filter-select" onChange={handleFilterChange}>
+        <option value="">Todos</option>
+        <option value="1">Primero</option>
+        <option value="2">Segundo</option>
+      </select>
+
       <button onClick={handleVerInfoGeneral}>Ver Info General</button>
 
       {showGeneralInfo && (
@@ -138,7 +158,7 @@ export default function Asignaturas() {
             </div>
             <div className="modal-content">
               <div className="grid">
-                {asignaturas.map((asignatura) => (
+                {filteredAsignaturas.map((asignatura) => (
                   <div className="grid-item" key={asignatura.course_id}>
                     <h3>{asignatura.course_name}</h3>
                     <p>Código: {asignatura.code}</p>
@@ -150,15 +170,15 @@ export default function Asignaturas() {
           </div>
         </div>
       )}
-
-      {/* Lista de Asignaturas */}
+      
+      
       <div className="sidebar">
         <h2 className="sidebar-title">Asignaturas Disponibles</h2>
         <button className="add-button" onClick={handleAgregarAsignatura}>
           Agregar Asignatura
         </button>
         <ul className="asignaturas-list">
-          {asignaturas.map((asignatura) => (
+          {filteredAsignaturas.map((asignatura) => (
             <li key={asignatura.course_id} className="asignatura-item">
               <span className="asignatura-info">
                 {asignatura.course_name} - {asignatura.code} - Créditos: {asignatura.credits}
@@ -170,7 +190,6 @@ export default function Asignaturas() {
           ))}
         </ul>
       </div>
-
       {/* Información Detallada de la Asignatura */}
       <div className="details">
         {selectedAsignatura && (
