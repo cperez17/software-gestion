@@ -27,8 +27,8 @@ export async function POST(request: Request) {
   try {
     const res = await pool.query(
       `INSERT INTO teacher_course_assignments (teacher_id, course_id, assigned_date, semester_id)
-      VALUES ($1, 
-              (SELECT course_id FROM courses WHERE course_name = $2 AND school_id = (SELECT school_id FROM schools WHERE school_name = $3)),
+       VALUES ($1, 
+               (SELECT course_id FROM courses WHERE course_name = $2 AND school_id = (SELECT school_id FROM schools WHERE school_name = $3)),
                CURRENT_DATE, 1)`, // Puedes ajustar el "semester_id" según sea necesario
       [teacher_id, course_name, school_name]
     );

@@ -6,7 +6,6 @@
 -- Dumped by pg_dump version 16.3
 
 -- Started on 2024-11-03 23:12:45
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -814,6 +813,8 @@ ALTER TABLE ONLY public.teacher_course_assignments
     ADD CONSTRAINT teacher_course_assignments_teacher_id_fkey FOREIGN KEY (teacher_id) REFERENCES public.teachers(teacher_id) ON DELETE CASCADE;
 
 
+
+=======
 -- Completed on 2024-11-03 23:12:46
 
 --

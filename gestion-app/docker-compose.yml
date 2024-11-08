@@ -23,5 +23,3 @@ services:
 
 volumes:
   postgres_data: # Volumen para persistir datos de PostgreSQL
-
-  
