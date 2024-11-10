@@ -70,48 +70,44 @@ export default function Docentes() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid()) {
-      if (isEditing) {
-        const response = await fetch(`/api/docentes?id=${newDocente.teacher_id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newDocente),
-        });
-
-        if (response.ok) {
-          const updatedDocente = await response.json();
+      const url = isEditing ? `/api/docentes?id=${newDocente.teacher_id}` : '/api/docentes';
+      const method = isEditing ? 'PUT' : 'POST';
+  
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newDocente),
+      });
+  
+      const result = await response.json();
+      if (response.ok) {
+        if (isEditing) {
           setDocentes((prev) =>
-            prev.map((docente) => (docente.teacher_id === updatedDocente.teacher_id ? updatedDocente : docente))
+            prev.map((docente) => (docente.teacher_id === result.teacher_id ? result : docente))
           );
           alert('Docente actualizado exitosamente');
         } else {
-          alert('Error al actualizar el docente');
+          setDocentes((prev) => [...prev, result]);
+          alert('Docente agregado exitosamente');
         }
-      } else {
-        const response = await fetch('/api/docentes', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newDocente),
+        setIsModalOpen(false);
+        setIsEditing(false);
+        setNewDocente({
+          first_name: '',
+          last_name: '',
+          email: '',
+          phone_number: '',
+          max_credits: 0,
+          rut_login: '',
+          password: '',
+          contract: '',
+          status: true,
         });
-        const addedDocente = await response.json();
-        setDocentes((prev) => [...prev, addedDocente]);
+      } else {
+        alert(result.error || 'Error al guardar el docente');
       }
-      setIsModalOpen(false);
-      setIsEditing(false);
-      setNewDocente({
-        first_name: '',
-        last_name: '',
-        email: '',
-        phone_number: '',
-        max_credits: 0,
-        rut_login: '',
-        password: '',
-        contract: '',
-        status: true,
-      });
     } else {
       alert("Por favor, completa todos los campos obligatorios sin espacios en blanco y asegúrate de que el RUT tenga el formato correcto (8 dígitos, guión y un dígito o 'k').");
     }
