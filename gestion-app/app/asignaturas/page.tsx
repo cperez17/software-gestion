@@ -173,23 +173,23 @@ export default function Asignaturas() {
       
       
       <div className="sidebar">
-        <h2 className="sidebar-title">Asignaturas Disponibles</h2>
-        <button className="add-button" onClick={handleAgregarAsignatura}>
-          Agregar Asignatura
-        </button>
-        <ul className="asignaturas-list">
-          {filteredAsignaturas.map((asignatura) => (
-            <li key={asignatura.course_id} className="asignatura-item">
-              <span className="asignatura-info">
-                {asignatura.course_name} - {asignatura.code} - Créditos: {asignatura.credits}
-              </span>
-              <button className="info-button" onClick={() => handleVerInformacion(asignatura)}>
-                Ver Información
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <h2 className="sidebar-title">Asignaturas Disponibles</h2>
+    <button className="add-button" onClick={handleAgregarAsignatura}>
+      Agregar Asignatura
+    </button>
+    <ul className="asignaturas-list">
+      {filteredAsignaturas.map((asignatura) => (
+        <li key={asignatura.course_id} className="asignatura-item">
+          <span className="asignatura-info">
+            {asignatura.course_name} - {asignatura.code} - Créditos: {asignatura.credits}
+          </span>
+          <button className="info-button" onClick={() => handleVerInformacion(asignatura)}>
+            Ver Información
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
       {/* Información Detallada de la Asignatura */}
       <div className="details">
         {selectedAsignatura && (
