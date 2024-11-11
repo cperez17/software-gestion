@@ -8,7 +8,7 @@ const pool = new Pool({
   host: "db",
   database: "soft-tech",
   password: "jera123",
-  port: 5432,
+  port: 4004,
 });
 
 export async function POST(request: Request) {

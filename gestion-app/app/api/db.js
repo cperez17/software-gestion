@@ -7,7 +7,7 @@ const client = new Client({
   host: "db",
   database: "soft-tech",
   password: "jera123", 
-  port: 5432,
+  port: 4004,
 });
 
 client.connect()

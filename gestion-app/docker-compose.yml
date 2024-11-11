@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: jera123 # Contraseña por defecto
       POSTGRES_DB: "soft-tech" # Nombre de la base de datos a crear
     ports:
-      - "5432:5432" # Mapea el puerto 5432 del contenedor al host
+      - "4004:5432" # Mapea el puerto 4004 del host al puerto 5432 del contenedor
     volumes: 
       - postgres_data:/var/lib/postgresql/data # Persistencia de datos
       - ./backupf.sql:/docker-entrypoint-initdb.d/backupf.sql # Monta el backup.sql
