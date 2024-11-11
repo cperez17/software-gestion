@@ -1,0 +1,162 @@
+/*gestion-app\app\asignaciones\estilos.css*/
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  margin-top: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+.search-bar {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.semester-selector {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.semester-buttons-grid {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.semester-list {
+  display: flex;
+  gap: 10px;
+  list-style-type:square;
+  padding: 10;
+}
+
+.semester-button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.semester-button:hover {
+  background-color: #20ff02;
+}
+
+.selected-semester {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.change-semester-button {
+  margin-left: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.change-semester-button:hover {
+  background-color: #0056b3;
+}
+
+.docentes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.docente-card {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  width: 250px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.view-more-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.view-more-button:hover {
+  background-color: #0056b3;
+}
+
+.asignaciones-list {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.asignacion-card {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.asignacion-card p {
+  margin: 5px 0;
+}
+.delete-button {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.delete-button:hover {
+  background-color: #c9302c;
+}
+
+.button-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.redirect-button {
+  background-color: #4a5568; /* Color del botón */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.redirect-button:hover {
+  background-color: #2d3748; /* Color al hacer hover */
+}

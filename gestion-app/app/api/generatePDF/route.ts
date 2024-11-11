@@ -1,10 +1,12 @@
-// app/api/generatePDF/route.ts
-import puppeteer from 'puppeteer';
+import { chromium } from 'playwright';
 
 export async function POST(req: Request) {
-    const browser = await puppeteer.launch();
+    const browser = await chromium.launch();
     const page = await browser.newPage();
-    await page.goto('http://localhost:3004/informesSolicitud', { waitUntil: 'networkidle2' });
+    const host = req.headers.get('host');
+
+    // Añade los parámetros `?pdf=true&hideButton=true` en la URL
+    await page.goto(`http://${host}/informesSolicitud?pdf=true&hideButton=true`, { waitUntil: 'networkidle' });
 
     const pdfBuffer = await page.pdf({
         format: 'A4',
@@ -13,10 +15,10 @@ export async function POST(req: Request) {
 
     await browser.close();
 
-    // En lugar de `res.setHeader`, usa `new Response` con los encabezados directamente
     return new Response(pdfBuffer, {
         headers: {
             'Content-Type': 'application/pdf',
+            'Content-Disposition': 'attachment; filename="informe.pdf"',
         },
     });
 }
