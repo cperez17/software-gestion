@@ -885,4 +885,3 @@ ALTER TABLE ONLY public.teacher_course_assignments
 --
 -- PostgreSQL database dump complete
 --
-
