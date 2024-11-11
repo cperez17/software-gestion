@@ -158,66 +158,91 @@ form {
   border-radius: 8px; /* Bordes redondeados */
 }
 
-/* Estilo de la barra de navegación */
+
+/* Barra de navegación */
 .navbar {
-  background-color: #1F2937; /* Fondo oscuro */
-  padding: 15px; /* Aumento del padding */
+  background-color: #1E40AF;
+  padding: 10px 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra */
+  justify-content: center;
+  color: white;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Contenido de la barra de navegación */
 .navbar-content {
   display: flex;
-  width: 100%;
   justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  align-items: center;
 }
 
 .adminLabel {
-  color: white;
   font-weight: bold;
+  font-size: 1.2rem;
   margin-right: 20px;
 }
 
-.navLinks ul {
-  list-style: none;
+.userEmail {
+  font-size: 1rem;
+  color: #D1D5DB;
+}
+
+.navLinks {
+  flex-grow: 1;
   display: flex;
-  gap: 20px;
+  justify-content: center;
 }
 
-.navLinks ul li {
-  display: inline;
+/* Configuración de cuadrícula para botones */
+.navGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 800px;
 }
 
-.navLinks ul li a {
+.navButton {
+  background-color: #1E3A8A;
   color: white;
-  text-decoration: none;
-  padding: 10px;
-  transition: color 0.3s ease;
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.85rem;
 }
 
-.navLinks ul li a:hover {
-  color: #ddd; /* Lighter on hover */
+.navButton:hover {
+  background-color: #3B82F6;
+  transform: scale(1.05);
+}
+
+.icon {
+  font-size: 1.4rem;
+  margin-bottom: 5px;
 }
 
 .authLinks {
-  margin-left: auto;
-}
-
-.authLinks a, .authLinks button {
+  display: flex;
+  gap: 15px;
   color: white;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
 }
 
-.authLinks a:hover, .authLinks button:hover {
-  color: #ddd;
+.authLinks a {
+  color: white;
+  text-decoration: none;
 }
 
+.authLinks a:hover {
+  color: #3B82F6;
+  text-decoration: underline;
+}
 main {
   padding: 20px;
 }
