@@ -141,3 +141,22 @@ h1 {
 .delete-button:hover {
   background-color: #c9302c;
 }
+
+.button-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.redirect-button {
+  background-color: #4a5568; /* Color del botón */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.redirect-button:hover {
+  background-color: #2d3748; /* Color al hacer hover */
+}

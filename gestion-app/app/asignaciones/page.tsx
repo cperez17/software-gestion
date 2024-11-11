@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';  // Importa el enrutador de Next.js
 import "./estilos.css";
 
 interface Asignacion {
@@ -32,12 +33,12 @@ export default function AsignacionesDocentes() {
   const [expandedDocente, setExpandedDocente] = useState<number | null>(null);
   const [selectedSemesterName, setSelectedSemesterName] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const router = useRouter();  // Usa el enrutador para manejar la redirección
 
   const fetchAsignaciones = async (semesterId: number) => {
     const res = await fetch(`/api/asignaciones?semester_id=${semesterId}`);
     const data: Asignacion[] = await res.json();
 
-    // Agrupar las asignaciones exclusivamente por `teacher_id`
     const groupedByDocente: { [key: number]: DocenteAsignaciones } = {};
     data.forEach((asignacion) => {
       if (!groupedByDocente[asignacion.teacher_id]) {
@@ -50,7 +51,6 @@ export default function AsignacionesDocentes() {
       groupedByDocente[asignacion.teacher_id].asignaciones.push(asignacion);
     });
 
-    console.log("Asignaciones agrupadas por docente:", groupedByDocente);
     setDocentesAsignaciones(Object.values(groupedByDocente));
   };
 
@@ -151,12 +151,6 @@ export default function AsignacionesDocentes() {
                       <p><strong>Créditos:</strong> {asignacion.credits}</p>
                       <p><strong>Semestre:</strong> {asignacion.semester_name}</p>
                       <p><strong>Fecha de Asignación:</strong> {new Date(asignacion.assigned_date).toLocaleDateString()}</p>
-                      <button
-                        onClick={() => handleDeleteAsignacion(asignacion.assignment_id)}
-                        className="delete-button"
-                      >
-                        Eliminar asignación
-                      </button>
                     </div>
                   ))}
                 </div>
@@ -166,6 +160,13 @@ export default function AsignacionesDocentes() {
         ) : (
           <p>No hay asignaciones registradas para el semestre seleccionado o la búsqueda actual.</p>
         )}
+      </div>
+
+      {/* Botón de redirección a /informesSolicitud */}
+      <div className="button-container">
+        <button onClick={() => router.push('/informesSolicitud')} className="redirect-button">
+          Ver Informe Completo
+        </button>
       </div>
     </div>
   );

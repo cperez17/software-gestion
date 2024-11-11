@@ -1,4 +1,3 @@
-//gestion-app\app\solicitud\page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -78,11 +77,7 @@ export default function Solicitudes() {
     if (!selectedSemester) return;
 
     try {
-      const response = await fetch(`/api/solicitudes?semester_id=${selectedSemester}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-
+      const response = await fetch(`/api/solicitudes?semester_id=${selectedSemester}`);
       if (!response.ok) return;
 
       const data = await response.json();
@@ -93,8 +88,8 @@ export default function Solicitudes() {
         group: solicitud.group,
       }));
 
-      const uniqueAsignaturas: AsignaturaSolicitada[] = Array.from(
-        new Map(fetchedAsignaturas.map((item: AsignaturaSolicitada) => [item.course_name, item])).values()
+      const uniqueAsignaturas = Array.from(
+        new Map(fetchedAsignaturas.map((item) => [item.course_name, item])).values()
       );
 
       setAsignaturas(fetchedAsignaturas);
@@ -111,13 +106,11 @@ export default function Solicitudes() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const uploadedFile = e.target.files?.[0] || null;
-    setFile(uploadedFile);
+    setFile(e.target.files?.[0] || null);
   };
 
   const handleFileUpload = async () => {
     if (!file || !selectedSemester) return;
-
     const reader = new FileReader();
     reader.onload = async (event) => {
       const buffer = event.target?.result as ArrayBuffer;
@@ -184,14 +177,8 @@ export default function Solicitudes() {
 
       if (response.ok) {
         alert("Profesores asignados y solicitud aprobada.");
-
-        setAsignaturas((prev) =>
-          prev.filter(asignatura => asignatura.course_name !== selectedAsignatura?.course_name)
-        );
-        setUniqueAsignaturas((prev) =>
-          prev.filter(asignatura => asignatura.course_name !== selectedAsignatura?.course_name)
-        );
-
+        setAsignaturas(prev => prev.filter(asignatura => asignatura.course_name !== selectedAsignatura?.course_name));
+        setUniqueAsignaturas(prev => prev.filter(asignatura => asignatura.course_name !== selectedAsignatura?.course_name));
         setSelectedProfessors([]);
         setIsModalOpen(false);
       } else {
@@ -285,11 +272,11 @@ export default function Solicitudes() {
         </select>
 
         {selectedSemester && (
-          <>
+          <div className="file-upload-section">
             <label htmlFor="file-upload">Subir archivo de solicitudes:</label>
             <input id="file-upload" type="file" accept=".xlsx, .ods" onChange={handleFileChange} />
             <button className="upload-button" onClick={handleFileUpload}>Subir Archivo</button>
-          </>
+          </div>
         )}
       </div>
 
@@ -390,6 +377,7 @@ export default function Solicitudes() {
       <button onClick={() => router.push('/asignaciones')} className="view-assignments-button">
         Ver Asignaciones
       </button>
+
     </div>
   );
 }

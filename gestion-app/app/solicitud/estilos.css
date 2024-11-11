@@ -75,7 +75,49 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #1E40AF;
+  margin-bottom: 1.5rem;
+}
+h1 {
+  font-size: 2rem;
+  color: #1E40AF;
+  margin-bottom: 1.5rem;
+}
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+#semester-select,
+#file-upload,
+.upload-button,
+.view-assignments-button {
+  margin-top: 10px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upload-button {
+  background-color: #1E40AF;
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.upload-button:hover {
+  background-color: #3B82F6;
 }
 
 .asignaturas-grid {
@@ -83,37 +125,51 @@
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   width: 100%;
-  max-width: 1200px;
-  padding: 20px;
 }
 
 .asignatura-card {
-  background-color: #f9f9f9;
-  padding: 20px;
+  background-color: #F9FAFB;
   border-radius: 8px;
+  padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   text-align: center;
+  transition: box-shadow 0.3s;
+}
+.asignatura-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.info-button,
-.confirm-btn {
-  background-color: blue;
+h3 {
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.info-button {
+  background-color: #2563EB;
   color: white;
+  padding: 0.5rem 1rem;
   border: none;
-  padding: 10px 20px;
-  cursor: pointer;
   border-radius: 5px;
-  margin-top: 10px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.info-button:hover,
-.confirm-btn:hover {
-  background-color: darkblue;
+.info-button:hover {
+  background-color: #1D4ED8;
 }
 
+.view-assignments-button {
+  background-color: #10B981;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-top: 2rem;
+  transition: background-color 0.3s;
+}
 
+.view-assignments-button:hover {
+  background-color: #059669;
+}
 

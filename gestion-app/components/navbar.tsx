@@ -1,11 +1,12 @@
-
+// gestion-app/components/navbar.tsx
 'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logout from '../app/logout';
-import UserPopup from './userPopup'; 
+import UserPopup from './userPopup';
+import { FaHome, FaBook, FaClipboard, FaUser, FaHistory, FaChartLine, FaSignOutAlt } from 'react-icons/fa'; // Iconos de ejemplo
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function NavBar({ session }: { session: any }) {
@@ -14,56 +15,75 @@ export default function NavBar({ session }: { session: any }) {
 
   const isLoginPage = pathname === '/login';
   const isRegisterPage = pathname === '/register';
-  if (isLoginPage||isRegisterPage) {
+  if (isLoginPage || isRegisterPage) {
     return null;
   }
 
   const handleProfileClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault(); 
+    e.preventDefault();
     setIsPopupVisible((prev) => !prev);
   };
 
   return (
-    <nav className="bg-gray-800 text-white p-4 relative">
-      <div className="flex justify-between items-center">
-        <span className="font-bold">Administrador</span>
+    <nav className="navbar">
+      <div className="navbar-content">
+        <span className="adminLabel">Administrador</span>
 
-        {/* Show user email if logged in */}
+        {/* Mostrar email del usuario si está logueado */}
         {session ? (
-          <span className="mr-4">{session.user?.email}</span>
+          <span className="userEmail">{session.user?.email}</span>
         ) : null}
 
-        <div className="space-x-4">
-          {/* Navigation links visible only when logged in */}
+        <div className="navLinks">
+          {/* Enlaces de navegación solo si el usuario está logueado */}
           {session ? (
-            <>
-              <Link href="/inicio">Inicio</Link>
-              <Link href="/asignaturas">Asignaturas</Link>
-              <Link href="/solicitud">Solicitudes</Link>
-              <Link href="/docentes">Planta Docente</Link>            
-              <Link href="/informes">Informes</Link>
-              <Link href="/historico">Histórico</Link>
-              <Link href="#" onClick={handleProfileClick}>
-                Perfil
+            <div className="navGrid">
+              <Link href="/inicio" className="navButton">
+                <FaHome className="icon" />
+                <span>Inicio</span>
+              </Link>
+              <Link href="/asignaturas" className="navButton">
+                <FaBook className="icon" />
+                <span>Asignaturas</span>
+              </Link>
+              <Link href="/solicitud" className="navButton">
+                <FaClipboard className="icon" />
+                <span>Solicitudes</span>
+              </Link>
+              <Link href="/docentes" className="navButton">
+                <FaUser className="icon" />
+                <span>Docentes</span>
+              </Link>
+              <Link href="/informes" className="navButton">
+                <FaChartLine className="icon" />
+                <span>Informes</span>
+              </Link>
+              <Link href="/historico" className="navButton">
+                <FaHistory className="icon" />
+                <span>Histórico</span>
+              </Link>
+              <Link href="#" onClick={handleProfileClick} className="navButton">
+                <FaUser className="icon" />
+                <span>Perfil</span>
               </Link>
               {isPopupVisible && (
                 <UserPopup
                   email={session.user?.email}
-                  role={session.user?.role} // Assuming the role is also stored in the session
+                  role={session.user?.role}
                   onClose={() => setIsPopupVisible(false)}
                 />
               )}
-            </>
+            </div>
           ) : (
-            <>
+            <div className="authLinks">
               <Link href="/login">Login</Link>
               <Link href="/register">Register</Link>
-            </>
+            </div>
           )}
         </div>
 
         {session ? (
-          <Logout /> // Use the Logout component here
+          <Logout /> // Usar componente de Logout
         ) : (
           <Link href="/login">Login</Link>
         )}
