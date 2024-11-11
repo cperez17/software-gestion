@@ -51,13 +51,18 @@ export default function Docentes() {
     }));
   };
 
+  const isRutValid = (rut: string) => {
+    const rutRegex = /^[0-9]{8}-[0-9kK]{1}$/;
+    return rutRegex.test(rut);
+  };
+
   const isFormValid = () => {
     return newDocente.first_name.trim() !== '' &&
            newDocente.last_name.trim() !== '' &&
            newDocente.email.trim() !== '' &&
            newDocente.max_credits > 0 &&
            newDocente.phone_number?.trim() !== '' &&
-           newDocente.rut_login?.trim() !== '' &&
+           isRutValid(newDocente.rut_login || '') &&
            newDocente.password?.trim() !== '' &&
            newDocente.contract?.trim() !== '';
   };
@@ -65,50 +70,46 @@ export default function Docentes() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid()) {
-      if (isEditing) {
-        const response = await fetch(`/api/docentes?id=${newDocente.teacher_id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newDocente),
-        });
-
-        if (response.ok) {
-          const updatedDocente = await response.json();
+      const url = isEditing ? `/api/docentes?id=${newDocente.teacher_id}` : '/api/docentes';
+      const method = isEditing ? 'PUT' : 'POST';
+  
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newDocente),
+      });
+  
+      const result = await response.json();
+      if (response.ok) {
+        if (isEditing) {
           setDocentes((prev) =>
-            prev.map((docente) => (docente.teacher_id === updatedDocente.teacher_id ? updatedDocente : docente))
+            prev.map((docente) => (docente.teacher_id === result.teacher_id ? result : docente))
           );
           alert('Docente actualizado exitosamente');
         } else {
-          alert('Error al actualizar el docente');
+          setDocentes((prev) => [...prev, result]);
+          alert('Docente agregado exitosamente');
         }
-      } else {
-        const response = await fetch('/api/docentes', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newDocente),
+        setIsModalOpen(false);
+        setIsEditing(false);
+        setNewDocente({
+          first_name: '',
+          last_name: '',
+          email: '',
+          phone_number: '',
+          max_credits: 0,
+          rut_login: '',
+          password: '',
+          contract: '',
+          status: true,
         });
-        const addedDocente = await response.json();
-        setDocentes((prev) => [...prev, addedDocente]);
+      } else {
+        alert(result.error || 'Error al guardar el docente');
       }
-      setIsModalOpen(false);
-      setIsEditing(false);
-      setNewDocente({
-        first_name: '',
-        last_name: '',
-        email: '',
-        phone_number: '',
-        max_credits: 0,
-        rut_login: '',
-        password: '',
-        contract: '',
-        status: true,
-      });
     } else {
-      alert("Por favor, completa todos los campos obligatorios sin espacios en blanco.");
+      alert("Por favor, completa todos los campos obligatorios sin espacios en blanco y asegúrate de que el RUT tenga el formato correcto (8 dígitos, guión y un dígito o 'k').");
     }
   };
 
@@ -266,6 +267,12 @@ export default function Docentes() {
         .modal button:hover {
           background-color: #45a049;
         }
+        .delete-btn {
+          background-color: #ff0000 !important;
+        }
+        .delete-btn:hover {
+          background-color: #cc0000 !important;
+        }
       `}</style>
 
       <button className="add-docente-btn" onClick={handleAgregarDocente}>Agregar Docente</button>
@@ -285,11 +292,9 @@ export default function Docentes() {
           <ul className="docentes-list">
             {filteredDocentes
               .filter((docente) => docente.status === true)
-              .map((docente, index) => (
-                <li key={index} className="docente-item">
-                  <span className="docente-info">
-                    {docente.first_name} {docente.last_name}
-                  </span>
+              .map((docente) => (
+                <li key={docente.teacher_id} className="docente-item">
+                  {docente.first_name} {docente.last_name}
                   <button onClick={() => handleVerInfo(docente)}>Ver Información</button>
                 </li>
               ))}
@@ -300,12 +305,10 @@ export default function Docentes() {
           <h2>Docentes Inactivos</h2>
           <ul className="docentes-list">
             {filteredDocentes
-              .filter((docente) => docente.status === null || docente.status === false)
-              .map((docente, index) => (
-                <li key={index} className="docente-item">
-                  <span className="docente-info">
-                    {docente.first_name} {docente.last_name}
-                  </span>
+              .filter((docente) => docente.status === false)
+              .map((docente) => (
+                <li key={docente.teacher_id} className="docente-item">
+                  {docente.first_name} {docente.last_name}
                   <button onClick={() => handleVerInfo(docente)}>Ver Información</button>
                 </li>
               ))}
@@ -316,7 +319,7 @@ export default function Docentes() {
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>{isEditing ? 'Modificar Docente' : 'Agregar Nuevo Docente'}</h2>
+            <h2>{isEditing ? 'Editar Docente' : 'Agregar Docente'}</h2>
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -345,9 +348,10 @@ export default function Docentes() {
               <input
                 type="text"
                 name="phone_number"
-                placeholder="Número de Celular"
+                placeholder="Teléfono"
                 value={newDocente.phone_number}
                 onChange={handleInputChange}
+                required
               />
               <input
                 type="number"
@@ -360,9 +364,10 @@ export default function Docentes() {
               <input
                 type="text"
                 name="rut_login"
-                placeholder="RUT"
+                placeholder="RUT (formato: 12345678-9)"
                 value={newDocente.rut_login}
                 onChange={handleInputChange}
+                required
               />
               <input
                 type="password"
@@ -370,6 +375,7 @@ export default function Docentes() {
                 placeholder="Contraseña"
                 value={newDocente.password}
                 onChange={handleInputChange}
+                required
               />
               <input
                 type="text"
@@ -377,9 +383,10 @@ export default function Docentes() {
                 placeholder="Contrato"
                 value={newDocente.contract}
                 onChange={handleInputChange}
+                required
               />
               <label>
-                Activo:
+                Estado:
                 <input
                   type="checkbox"
                   name="status"
@@ -387,7 +394,7 @@ export default function Docentes() {
                   onChange={handleInputChange}
                 />
               </label>
-              <button type="submit">{isEditing ? 'Guardar Cambios' : 'Agregar Docente'}</button>
+              <button type="submit">{isEditing ? 'Guardar Cambios' : 'Agregar'}</button>
               <button type="button" onClick={handleModalClose}>Cancelar</button>
             </form>
           </div>
@@ -398,15 +405,15 @@ export default function Docentes() {
         <div className="modal-overlay">
           <div className="modal">
             <h2>Información del Docente</h2>
-            <p>Nombre: {selectedDocente.first_name} {selectedDocente.last_name}</p>
-            <p>Email: {selectedDocente.email}</p>
-            <p>Teléfono: {selectedDocente.phone_number}</p>
-            <p>Créditos Máximos: {selectedDocente.max_credits}</p>
-            <p>RUT: {selectedDocente.rut_login}</p>
-            <p>Contrato: {selectedDocente.contract}</p>
-            <p>Estado: {selectedDocente.status ? "Activo" : "Inactivo"}</p>
-            <button onClick={() => handleEditDocente(selectedDocente)}>Editar</button>
-            <button onClick={() => handleDeleteDocente(selectedDocente.teacher_id!)}>Eliminar</button>
+            <p><strong>Nombre:</strong> {selectedDocente.first_name} {selectedDocente.last_name}</p>
+            <p><strong>Email:</strong> {selectedDocente.email}</p>
+            <p><strong>Teléfono:</strong> {selectedDocente.phone_number}</p>
+            <p><strong>Créditos Máximos:</strong> {selectedDocente.max_credits}</p>
+            <p><strong>RUT:</strong> {selectedDocente.rut_login}</p>
+            <p><strong>Contrato:</strong> {selectedDocente.contract}</p>
+            <p><strong>Estado:</strong> {selectedDocente.status ? 'Activo' : 'Inactivo'}</p>
+            <button onClick={() => handleEditDocente(selectedDocente)}>Modificar</button>
+            <button className="delete-btn" onClick={() => handleDeleteDocente(selectedDocente.teacher_id!)}>Eliminar</button>
             <button onClick={handleInfoModalClose}>Cerrar</button>
           </div>
         </div>

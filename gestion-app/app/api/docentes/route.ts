@@ -25,6 +25,12 @@ export async function POST(request: Request) {
   const { first_name, last_name, email, phone_number, max_credits, rut_login, password, contract, status } = body;
 
   try {
+    // Verifica si el RUT ya existe en la base de datos
+    const checkRut = await pool.query('SELECT teacher_id FROM teachers WHERE rut_login = $1', [rut_login]);
+    if ((checkRut.rowCount ?? 0) > 0) {
+      return NextResponse.json({ error: 'El RUT ingresado ya está asignado a otro docente' }, { status: 400 });
+    }
+
     const res = await pool.query(
       'INSERT INTO teachers (first_name, last_name, email, phone_number, max_credits, rut_login, password, contract, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
       [first_name, last_name, email, phone_number, max_credits, rut_login, password, contract, status]
@@ -48,6 +54,12 @@ export async function PUT(request: Request) {
   }
 
   try {
+    // Verifica si el nuevo RUT ya está asignado a otro docente
+    const checkRut = await pool.query('SELECT teacher_id FROM teachers WHERE rut_login = $1 AND teacher_id != $2', [rut_login, teacher_id]);
+    if ((checkRut.rowCount ?? 0) > 0) {
+      return NextResponse.json({ error: 'El RUT ingresado ya está asignado a otro docente' }, { status: 400 });
+    }
+
     const res = await pool.query(
       'UPDATE teachers SET first_name = $1, last_name = $2, email = $3, phone_number = $4, max_credits = $5, rut_login = $6, password = $7, contract = $8, status = $9 WHERE teacher_id = $10 RETURNING *',
       [first_name, last_name, email, phone_number, max_credits, rut_login, password, contract, status, teacher_id]
