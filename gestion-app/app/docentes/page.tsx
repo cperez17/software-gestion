@@ -267,6 +267,12 @@ export default function Docentes() {
         .modal button:hover {
           background-color: #45a049;
         }
+        .delete-btn {
+          background-color: #ff0000 !important;
+        }
+        .delete-btn:hover {
+          background-color: #cc0000 !important;
+        }
       `}</style>
 
       <button className="add-docente-btn" onClick={handleAgregarDocente}>Agregar Docente</button>
@@ -303,7 +309,7 @@ export default function Docentes() {
               .map((docente) => (
                 <li key={docente.teacher_id} className="docente-item">
                   {docente.first_name} {docente.last_name}
-                  <button onClick={() => handleVerInfo(docente)}>Ver Info</button>
+                  <button onClick={() => handleVerInfo(docente)}>Ver Información</button>
                 </li>
               ))}
           </ul>
@@ -407,7 +413,7 @@ export default function Docentes() {
             <p><strong>Contrato:</strong> {selectedDocente.contract}</p>
             <p><strong>Estado:</strong> {selectedDocente.status ? 'Activo' : 'Inactivo'}</p>
             <button onClick={() => handleEditDocente(selectedDocente)}>Modificar</button>
-            <button onClick={() => handleDeleteDocente(selectedDocente.teacher_id!)}>Eliminar</button>
+            <button className="delete-btn" onClick={() => handleDeleteDocente(selectedDocente.teacher_id!)}>Eliminar</button>
             <button onClick={handleInfoModalClose}>Cerrar</button>
           </div>
         </div>
