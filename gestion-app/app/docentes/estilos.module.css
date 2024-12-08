@@ -1,0 +1,96 @@
+.layout {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.addDocenteBtn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+.searchBar {
+  margin-bottom: 20px;
+}
+.searchBar input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 300px;
+}
+.docentesContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.docentesColumn {
+  width: 48%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+.docentesList {
+  list-style-type: none;
+  padding: 0;
+}
+.docenteItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #ccc;
+}
+.docenteItem:last-child {
+  border-bottom: none;
+}
+.docenteInfo {
+  font-weight: bold;
+}
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.modal h2 {
+  margin: 0 0 15px;
+}
+.modal input,
+.modal button {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.modal button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.modal button:hover {
+  background-color: #45a049;
+}
+.deleteBtn {
+  background-color: #ff0000 !important;
+}
+.deleteBtn:hover {
+  background-color: #cc0000 !important;
+}

@@ -1,6 +1,7 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import styles from './estilos.module.css';
 
 interface Docente {
   teacher_id?: number; 
@@ -178,106 +179,10 @@ export default function Docentes() {
   );
 
   return (
-    <div className="layout docentes-page">
-      <style>{`
-        .layout {
-          font-family: Arial, sans-serif;
-          margin: 20px;
-        }
-        .add-docente-btn {
-          background-color: #4CAF50;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          cursor: pointer;
-          border-radius: 5px;
-          margin-bottom: 20px;
-        }
-        .search-bar {
-          margin-bottom: 20px;
-        }
-        .search-bar input {
-          padding: 10px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          width: 300px;
-        }
-        .docentes-container {
-          display: flex;
-          justify-content: space-between;
-        }
-        .docentes-column {
-          width: 48%;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          padding: 10px;
-          background-color: #f9f9f9;
-        }
-        .docentes-list {
-          list-style-type: none;
-          padding: 0;
-        }
-        .docente-item {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 8px 0;
-          border-bottom: 1px solid #ccc;
-        }
-        .docente-item:last-child {
-          border-bottom: none;
-        }
-        .docente-info {
-          font-weight: bold;
-        }
-        .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(0, 0, 0, 0.7);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .modal {
-          background-color: white;
-          padding: 20px;
-          border-radius: 8px;
-          width: 400px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .modal h2 {
-          margin: 0 0 15px;
-        }
-        .modal input, .modal button {
-          width: 100%;
-          padding: 10px;
-          margin: 5px 0;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-        }
-        .modal button {
-          background-color: #4CAF50;
-          color: white;
-          border: none;
-          cursor: pointer;
-        }
-        .modal button:hover {
-          background-color: #45a049;
-        }
-        .delete-btn {
-          background-color: #ff0000 !important;
-        }
-        .delete-btn:hover {
-          background-color: #cc0000 !important;
-        }
-      `}</style>
+    <div className={styles.layout}>
+      <button className={styles.addDocenteBtn} onClick={handleAgregarDocente}>Agregar Docente</button>
 
-      <button className="add-docente-btn" onClick={handleAgregarDocente}>Agregar Docente</button>
-
-      <div className="search-bar">
+      <div className={styles.searchBar}>
         <input
           type="text"
           placeholder="Buscar docente por nombre"
@@ -286,14 +191,14 @@ export default function Docentes() {
         />
       </div>
 
-      <div className="docentes-container">
-        <div className="docentes-column">
+      <div className={styles.docentesContainer}>
+        <div className={styles.docentesColumn}>
           <h2>Docentes Activos</h2>
-          <ul className="docentes-list">
+          <ul className={styles.docentesList}>
             {filteredDocentes
               .filter((docente) => docente.status === true)
               .map((docente) => (
-                <li key={docente.teacher_id} className="docente-item">
+                <li key={docente.teacher_id} className={styles.docenteItem}>
                   {docente.first_name} {docente.last_name}
                   <button onClick={() => handleVerInfo(docente)}>Ver Información</button>
                 </li>
@@ -301,13 +206,13 @@ export default function Docentes() {
           </ul>
         </div>
 
-        <div className="docentes-column">
+        <div className={styles.docentesColumn}>
           <h2>Docentes Inactivos</h2>
-          <ul className="docentes-list">
+          <ul className={styles.docentesList}>
             {filteredDocentes
               .filter((docente) => docente.status === false)
               .map((docente) => (
-                <li key={docente.teacher_id} className="docente-item">
+                <li key={docente.teacher_id} className={styles.docenteItem}>
                   {docente.first_name} {docente.last_name}
                   <button onClick={() => handleVerInfo(docente)}>Ver Información</button>
                 </li>
@@ -317,8 +222,8 @@ export default function Docentes() {
       </div>
 
       {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
             <h2>{isEditing ? 'Editar Docente' : 'Agregar Docente'}</h2>
             <form onSubmit={handleSubmit}>
               <input
@@ -402,8 +307,8 @@ export default function Docentes() {
       )}
 
       {isInfoModalOpen && selectedDocente && (
-        <div className="modal-overlay">
-          <div className="modal">
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
             <h2>Información del Docente</h2>
             <p><strong>Nombre:</strong> {selectedDocente.first_name} {selectedDocente.last_name}</p>
             <p><strong>Email:</strong> {selectedDocente.email}</p>
@@ -413,7 +318,7 @@ export default function Docentes() {
             <p><strong>Contrato:</strong> {selectedDocente.contract}</p>
             <p><strong>Estado:</strong> {selectedDocente.status ? 'Activo' : 'Inactivo'}</p>
             <button onClick={() => handleEditDocente(selectedDocente)}>Modificar</button>
-            <button className="delete-btn" onClick={() => handleDeleteDocente(selectedDocente.teacher_id!)}>Eliminar</button>
+            <button className={styles.deleteBtn} onClick={() => handleDeleteDocente(selectedDocente.teacher_id!)}>Eliminar</button>
             <button onClick={handleInfoModalClose}>Cerrar</button>
           </div>
         </div>
