@@ -12,7 +12,7 @@ interface Docente {
   max_credits: number;
   rut_login?: string;
   password?: string;
-  contract?: string;
+  contract?: 'ADJ' | 'HON' | 'ACA' | 'PAD';
   status?: boolean | null;
 }
 
@@ -27,7 +27,7 @@ export default function Docentes() {
     max_credits: 0,
     rut_login: '',
     password: '',
-    contract: '',
+    contract: 'ADJ',
     status: true,
   });
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -44,12 +44,21 @@ export default function Docentes() {
     fetchDocentes();
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setNewDocente((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    
+    if (type === 'checkbox') {
+      const checkedValue = (e.target as HTMLInputElement).checked;
+      setNewDocente((prev) => ({
+        ...prev,
+        [name]: checkedValue,
+      }));
+    } else {
+      setNewDocente((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const isRutValid = (rut: string) => {
@@ -65,7 +74,7 @@ export default function Docentes() {
            newDocente.phone_number?.trim() !== '' &&
            isRutValid(newDocente.rut_login || '') &&
            newDocente.password?.trim() !== '' &&
-           newDocente.contract?.trim() !== '';
+           ['ADJ', 'HON', 'ACA', 'PAD'].includes(newDocente.contract || '');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,7 +112,7 @@ export default function Docentes() {
           max_credits: 0,
           rut_login: '',
           password: '',
-          contract: '',
+          contract: 'ADJ',
           status: true,
         });
       } else {
@@ -129,7 +138,7 @@ export default function Docentes() {
       max_credits: 0,
       rut_login: '',
       password: '',
-      contract: '',
+      contract: 'ADJ',
       status: true,
     });
     setIsEditing(false);
@@ -282,14 +291,21 @@ export default function Docentes() {
                 onChange={handleInputChange}
                 required
               />
-              <input
-                type="text"
-                name="contract"
-                placeholder="Contrato"
-                value={newDocente.contract}
-                onChange={handleInputChange}
-                required
-              />
+              <div className={styles['contract-dropdown']}>
+                <label htmlFor="contract">Tipo de Contrato:</label>
+                <select
+                  id="contract"
+                  name="contract"
+                  value={newDocente.contract}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="ADJ">ADJ</option>
+                  <option value="HON">HON</option>
+                  <option value="ACA">ACA</option>
+                  <option value="PAD">PAD</option>
+                </select>
+              </div>
               <label>
                 Estado:
                 <input
