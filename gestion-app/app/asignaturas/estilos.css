@@ -1,64 +1,132 @@
-.filter-select {
-    padding: 8px 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin: 8px 0;
-    cursor: pointer;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s ease;
-  }
-  
-  .filter-select:hover {
-    background-color: #e6e6e6;
-  }
-  
-  .filter-select:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
-  }
-  .layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%; /* Cambiado a 100% para ocupar todo el ancho de la página */
-    margin: 0 auto;
-  }
-  
-  /* Ajusta el ancho de la lista de asignaturas */
-  .asignaturas-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-    gap: 20px; /* Espacio entre las columnas */
-    width: 100%; /* Ajusta este valor según tus necesidades */
-    max-width: 1200px; /* Puedes establecer un valor máximo si lo deseas */
-  }
-  
-  /* Ajusta el ancho de los elementos de la lista */
-  .asignatura-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    width: 100%;
-  }
-  
-  /* Ajusta el ancho de la barra lateral */
-  .sidebar {
-    width: 100%; /* Cambiado a 100% para ocupar todo el ancho de la página */
-  }
-  .info-button {
-    background-color: #007bff; /* Color de fondo azul */
-    color: white; /* Color del texto blanco */
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .info-button:hover {
-    background-color: #007bff; /* Color de fondo al pasar el ratón */
-    color: white; /* Asegúrate de que el texto siga siendo blanco */
-  }
+/* Variables para colores temáticos */
+:root {
+  --primary-color: #f59e0b;      /* Amarillo oscuro */
+  --secondary-color: #fcd34d;    /* Amarillo claro */
+  --background-color: #fff7ed;   /* Fondo marfil */
+  --text-color: #4b5563;         /* Gris oscuro */
+  --accent-color: #fb923c;       /* Naranja vibrante */
+  --hover-color: #f97316;        /* Naranja para hover */
+}
+
+/* Fuente general para toda la página */
+body {
+  font-family: 'Inter', sans-serif; /* Asegúrate de incluir esta fuente en tu proyecto */
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+/* Estructura general */
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Títulos */
+h2 {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Lista de asignaturas */
+.asignaturas-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Ajusta para una disposición más flexible */
+  gap: 20px;
+  width: 100%;
+}
+
+/* Elemento de la lista de asignaturas */
+.asignatura-item {
+  background-color: #fffbeb;
+  border: 1px solid var(--secondary-color);
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; /* Hace que todas las tarjetas tengan la misma altura */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+/* Información de la asignatura */
+.asignatura-info {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  line-height: 1.5; /* Mejora el espaciado del texto */
+}
+
+/* Botones de información */
+.info-button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%; /* Hace que todos los botones ocupen el mismo ancho */
+  margin-top: auto; /* Empuja el botón hacia abajo para alinear mejor los elementos */
+}
+
+.info-button:hover {
+  background-color: var(--hover-color);
+  transform: scale(1.05);
+}
+
+/* Botón para agregar asignatura */
+.add-button {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-button:hover {
+  background-color: var(--hover-color);
+  transform: scale(1.05);
+}
+
+/* Modal */
+.modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-button {
+  background-color: #f43f5e;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: #dc2626;
+}

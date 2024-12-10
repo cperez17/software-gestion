@@ -99,9 +99,10 @@ export async function GET(request: Request) {
        FROM course_requests cr
        JOIN courses c ON cr.course_id = c.course_id
        JOIN schools s ON cr.school_id = s.school_id
-       WHERE cr.academic_year_id = $1`,
+       WHERE cr.academic_year_id = $1 AND cr.request_status = 'pending'`,
       [academic_year_id]
     );
+    
 
     return NextResponse.json({ solicitudes: result.rows }, { status: 200 });
   } catch (error) {

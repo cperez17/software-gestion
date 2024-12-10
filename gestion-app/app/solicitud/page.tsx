@@ -289,7 +289,7 @@ export default function Solicitudes() {
 
       </div>
 
-      <button onClick={fetchSolicitudes} className="fetch-button">
+      <button onClick={fetchSolicitudes} className="info-button">
         Cargar Solicitudes
       </button>
 
@@ -357,7 +357,7 @@ export default function Solicitudes() {
                       <button onClick={() => setEditingRequestId(null)}>Cancelar</button>
                     </>
                   ) : (
-                    <button onClick={() => handleEdit(solicitud)}>Editar</button>
+                    <button className="confirm-btn" onClick={() => handleEdit(solicitud)}>Editar</button>
                   )}
                 </li>
               ))}

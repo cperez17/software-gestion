@@ -4,16 +4,17 @@
 
 /* Variables para colores temáticos */
 :root {
-  --primary-color: #1E40AF; /* Azul corporativo */
-  --secondary-color: #60A5FA; /* Azul más claro */
-  --background-color: #ffffff;
-  --text-color: #1F2937; /* Gris oscuro para textos */
-  --accent-color: #FBBF24; /* Color de acento (dorado, amarillo) */
+  --primary-color: #f59e0b; /* Amarillo oscuro (Principal) */
+  --secondary-color: #fcd34d; /* Amarillo claro (Secundario) */
+  --background-color: #fff7ed; /* Fondo marfil */
+  --text-color: #4b5563; /* Gris oscuro para textos */
+  --accent-color: #fb923c; /* Naranja vibrante (Acento) */
+  --hover-color: #f97316; /* Naranja para efectos hover */
 }
 
 /* Fondo general con gradiente suave */
 body {
-  background: linear-gradient(to bottom, #ffffff, #ffffff);
+  background: linear-gradient(to bottom, var(--background-color), #fff);
   color: var(--text-color);
   font-family: 'Inter', sans-serif;
 }
@@ -39,18 +40,18 @@ h1, h2, h3 {
 }
 
 h1 {
-  font-size: 2.25rem; /* Tailwind: text-4xl */
-  margin-bottom: 1rem; /* Tailwind: mb-4 */
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
 }
 
 h2 {
-  font-size: 1.875rem; /* Tailwind: text-3xl */
-  margin-bottom: 0.75rem; /* Tailwind: mb-3 */
+  font-size: 1.875rem;
+  margin-bottom: 0.75rem;
 }
 
 h3 {
-  font-size: 1.5rem; /* Tailwind: text-2xl */
-  margin-bottom: 0.5rem; /* Tailwind: mb-2 */
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 /* Botones con estilo elegante */
@@ -58,60 +59,62 @@ button {
   background-color: var(--primary-color);
   color: #fff;
   font-weight: bold;
-  padding: 0.75rem 1.5rem; /* Aumento del padding */
-  border-radius: 0.5rem; /* Bordes más redondeados */
-  transition: background-color 0.3s ease, transform 0.2s; /* Añadido transform para hover */
-  border: none; /* Sin borde */
-  cursor: pointer; /* Cambiar el cursor a puntero */
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease, transform 0.2s;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(251, 146, 60, 0.2); /* Sombra suave naranja */
 }
 
 button:hover {
-  background-color: var(--secondary-color);
-  transform: scale(1.05); /* Efecto de ampliación al pasar el mouse */
+  background-color: var(--hover-color);
+  transform: scale(1.05);
 }
 
 /* Enlaces con color de acento */
 a {
   color: var(--accent-color);
   text-decoration: none;
-  transition: color 0.3s; /* Transición suave */
+  transition: color 0.3s;
 }
 
 a:hover {
   text-decoration: underline;
-  color: var(--secondary-color);
+  color: var(--hover-color);
 }
 
 /* Contenedor con sombra suave */
 .container {
-  max-width: 72rem; /* Tailwind: max-w-7xl */
-  margin: 0 auto; /* Centrar automáticamente */
-  padding: 1.5rem; /* Aumento del padding */
-  background-color: var(--background-color);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra más difusa */
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background-color: #fffbeb; /* Fondo amarillo muy claro */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
 }
 
 /* Formularios con un diseño limpio */
 input, textarea {
-  border: 1px solid #d1d5db; /* Tailwind: border-gray-300 */
-  border-radius: 0.5rem; /* Bordes redondeados */
-  padding: 0.75rem; /* Aumento del padding */
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
   width: 100%;
-  transition: border-color 0.3s; /* Transición suave para el borde */
+  transition: border-color 0.3s;
 }
 
 input:focus, textarea:focus {
   border-color: var(--primary-color);
   outline: none;
+  box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
 }
 
 /* Etiquetas */
 label {
-  font-size: 0.875rem; /* Tailwind: text-sm */
-  font-weight: 500; /* Tailwind: font-medium */
-  margin-bottom: 0.5rem; /* Tailwind: mb-2 */
-  color: #4b5563; /* Tailwind: text-gray-700 */
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
 }
 
 /* Pie de página */
@@ -119,10 +122,10 @@ footer {
   background-color: var(--primary-color);
   color: #fff;
   text-align: center;
-  padding: 1.5rem; /* Tailwind: py-6 */
-  margin-top: 2.5rem; /* Tailwind: mt-10 */
-  font-size: 0.875rem; /* Tailwind: text-sm */
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Sombra superior */
+  padding: 1.5rem;
+  margin-top: 2.5rem;
+  font-size: 0.875rem;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
 footer a {
@@ -136,7 +139,7 @@ footer a:hover {
 /* Estilo de la página de inicio de sesión */
 .login-page {
   background: url('/img/UACH.png') no-repeat center center fixed;
-  background-size: contain; /* Cambiado a cover para mejor ajuste */
+  background-size: contain;
   position: relative;
 }
 
@@ -147,30 +150,36 @@ footer a:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.5); /* Capa translúcida más opaca */
+  background: rgba(255, 255, 255, 0.6);
   z-index: 0;
 }
 
 form {
-  z-index: 10; /* Asegurar que el formulario quede sobre el fondo */
-  backdrop-filter: blur(5px); /* Efecto de desenfoque más pronunciado */
-  padding: 2rem; /* Aumento del padding */
-  border-radius: 8px; /* Bordes redondeados */
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 8px;
+  background: rgba(255, 243, 219, 0.9); /* Fondo con transparencia */
 }
-
 
 /* Barra de navegación */
 .navbar {
-  background-color: #1E40AF;
+  background-color: var(--primary-color);
   padding: 10px 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-family: 'Inter', sans-serif;
 }
 
+.navGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 800px;
+}
 .navbar-content {
   display: flex;
   justify-content: space-between;
@@ -179,246 +188,23 @@ form {
   align-items: center;
 }
 
-.adminLabel {
-  font-weight: bold;
-  font-size: 1.2rem;
-  margin-right: 20px;
-}
-
-.userEmail {
-  font-size: 1rem;
-  color: #D1D5DB;
-}
-
-.navLinks {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-}
-
-/* Configuración de cuadrícula para botones */
-.navGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 10px;
-  width: 100%;
-  max-width: 800px;
-}
-
+/* Botones de navegación */
 .navButton {
-  background-color: #1E3A8A;
+  background-color: var(--accent-color);
   color: white;
   text-align: center;
   padding: 8px;
   border-radius: 8px;
   transition: background-color 0.3s, transform 0.2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   font-size: 0.85rem;
 }
 
 .navButton:hover {
-  background-color: #3B82F6;
+  background-color: var(--hover-color);
   transform: scale(1.05);
 }
 
-.icon {
-  font-size: 1.4rem;
-  margin-bottom: 5px;
-}
-
-.authLinks {
-  display: flex;
-  gap: 15px;
-  color: white;
-}
-
-.authLinks a {
-  color: white;
-  text-decoration: none;
-}
-
-.authLinks a:hover {
-  color: #3B82F6;
-  text-decoration: underline;
-}
-main {
-  padding: 20px;
-}
-
-.absolute {
-  position: absolute;
-}
-
-.relative {
-  position: relative;
-}
-
-.z-10 {
-  z-index: 10; /* Asegurar que el popup aparezca sobre otros contenidos */
-}
-
-/* Sidebar para la lista de asignaturas */
-.sidebar {
-  width: 300px; /* Ancho fijo para la sidebar */
-  padding: 20px;
-  background-color: #ffffff; /* Fondo blanco */
-  border-right: 1px solid #d1d5db; /* Línea separadora */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra */
-  overflow-y: auto; /* Para evitar deslizamiento infinito */
-}
-
-/* Elemento de asignatura */
-.asignatura-item {
-  margin-bottom: 15px; /* Espaciado mejorado */
-  padding: 15px; /* Aumento del padding */
-  border: 1px solid #e5e7eb; /* Línea gris clara */
-  border-radius: 8px; /* Bordes redondeados */
-  background-color: #f3f4f6; /* Fondo gris claro */
-  transition: background-color 0.3s ease, transform 0.2s; /* Transiciones suaves */
-}
-
-.asignatura-item:hover {
-  background-color: var(--secondary-color); /* Color al pasar el mouse */
-  transform: scale(1.02); /* Efecto de ampliación al pasar el mouse */
-}
-
-/* Detalles de la asignatura */
-.details {
-  flex: 1; /* Ocupa el espacio restante */
-  padding: 20px;
-}
-
-/* Tarjeta de detalles */
-.details-card {
-  padding: 20px;
-  background-color: #ffffff; /* Fondo blanco */
-  border-radius: 8px; /* Bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra más suave */
-}
-
-/* Estilos adicionales para los botones de cierre */
-.close-button {
-  background-color: #f43f5e; /* Color de cierre */
-  padding: 0.5rem 1rem; /* Padding personalizado */
-  border-radius: 0.375rem; /* Bordes redondeados */
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-.close-button:hover {
-  background-color: #dc2626; /* Color de cierre más oscuro */
-}
-
-/* Asignaturas */
-.sidebar-title {
-  font-size: 1.5em;
-  margin-bottom: 1em;
-}
-
-.asignaturas-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-.asignatura-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5em;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  margin-bottom: 0.5em;
-  transition: background-color 0.3s;
-}
-
-.asignatura-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.asignatura-info {
-  font-weight: bold;
-}
-
-.info-button {
-  background-color: var(--color-primary);
-  color: #14527c;
-  padding: 0.5em 1em;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.info-button:hover {
-  background-color: var(--color-primary-hover);
-}
-
-.details-card {
-  background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco con transparencia */
-  border-radius: 10px; /* Bordes redondeados */
-  padding: 20px; /* Espaciado interno */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
-  max-width: 100%; /* Ancho máximo de la tarjeta */
-  margin: 20px; /* Espacio alrededor de la tarjeta */
-}
-.details-title {
-  font-size: 1.5em;
-  margin-bottom: 0.5em;
-}
-
-.close-button {
-  background-color: #dc2626; /* Color de cierre */
-  color: #fff;
-  padding: 0.5em 1em;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.close-button:hover {
-  background-color: #b91c1c; /* Color de cierre más oscuro */
-}
-
-.asignaturas-page {
-  background: url('/img/LOGOICOC.png') no-repeat center center fixed;
-  background-size: 30%; /* Ajusta la imagen para que cubra el área */
-  position: relative;
-  min-height: 100vh; /* Asegura que la página ocupe al menos toda la altura de la ventana */
-  padding: 20px; /* Espaciado interno */
-  display: flex; /* Utiliza flexbox para alinear contenido */
-}
-
-/* Asegúrate de que los botones sean accesibles */
-.info-button, .close-button {
-  color: #000; /* Color del texto */
-  border: none; /* Sin borde */
-  border-radius: 5px; /* Bordes redondeados */
-  padding: 10px 15px; /* Espaciado interno en los botones */
-  cursor: pointer; /* Cambia el cursor al pasar el ratón */
-  transition: background-color 0.3s; /* Efecto de transición */
-}
-
-.info-button:hover, .close-button:hover {
-  background-color: rgba(255, 255, 255, 1); /* Cambia el fondo al pasar el ratón */
-}
-
-.add-button, .delete-button {
-  background-color: rgba(0, 123, 255, 0.8); /* Azul traslúcido */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-  margin-left: 10px; /* Espacio entre botones */
-}
-
-.add-button:hover, .delete-button:hover {
-  background-color: rgba(0, 123, 255, 1); /* Color azul sólido al pasar el ratón */
-}
-
+/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -433,35 +219,21 @@ main {
 }
 
 .modal {
-  background-color: white;
+  background-color: #fff8e1; /* Amarillo pastel */
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 300px; /* Ajusta según necesites */
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .modal h2 {
-  margin-bottom: 10px;
+  color: var(--primary-color);
 }
 
-.modal input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+/* Botones de cerrar en modal */
+.close-button {
+  background-color: var(--accent-color);
 }
 
-.modal button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff; /* Color de botón */
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.modal button:hover {
-  background-color: #0056b3; /* Color al pasar el ratón */
+.close-button:hover {
+  background-color: var(--hover-color);
 }

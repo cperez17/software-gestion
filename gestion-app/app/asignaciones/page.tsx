@@ -103,25 +103,28 @@ export default function AsignacionesDocentes() {
       <div className="academic-year-selector">
         {!selectedAcademicYear ? (
           <>
-            <h2>Selecciona un año académico:</h2>
-            <ul className="academic-year-list">
+            <h2>Selecciona un Año Académico:</h2>
+            <select
+              onChange={(e) => {
+                const selectedId = parseInt(e.target.value, 10);
+                const selectedName = e.target.options[e.target.selectedIndex].text;
+                handleAcademicYearSelect(selectedId, selectedName);
+              }}
+              className="academic-year-dropdown"
+            >
+              <option value="">-- Selecciona un Año Académico --</option>
               {Object.entries(academicYearMapping).map(([academicYearName, academicYearId]) => (
-                <li key={academicYearId}>
-                  <button
-                    onClick={() => handleAcademicYearSelect(academicYearId, academicYearName)}
-                    className="academic-year-button"
-                  >
-                    {academicYearName}
-                  </button>
-                </li>
+                <option key={academicYearId} value={academicYearId}>
+                  {academicYearName}
+                </option>
               ))}
-            </ul>
+            </select>
           </>
         ) : (
           <p className="selected-academic-year">
             Año Académico actual: {selectedAcademicYearName}
             <button className="change-academic-year-button" onClick={() => setSelectedAcademicYear(null)}>
-              Cambiar año académico
+              Cambiar Año Académico
             </button>
           </p>
         )}
@@ -137,33 +140,39 @@ export default function AsignacionesDocentes() {
       </div>
 
       <div className="docentes-list">
-        {filteredDocentes.length > 0 ? (
-          filteredDocentes.map((docente) => (
-            <div key={docente.teacher_id} className={`docente-card ${expandedDocente === docente.teacher_id ? 'expanded' : ''}`}>
-              <h2>{docente.teacher_name}</h2>
+    {filteredDocentes.length > 0 ? (
+      <ul className="docente-list">
+        {filteredDocentes.map((docente) => (
+          <li key={docente.teacher_id} className={`docente-item ${expandedDocente === docente.teacher_id ? 'expanded' : ''}`}>
+            <div className="docente-header">
+              <span>{docente.teacher_name}</span>
               <button onClick={() => toggleExpand(docente.teacher_id)} className="view-more-button">
-                {expandedDocente === docente.teacher_id ? "Ocultar información" : "Ver más información"}
+                {expandedDocente === docente.teacher_id ? "Ocultar asignaciones" : "Ver asignaciones"}
               </button>
-              {expandedDocente === docente.teacher_id && (
-                <div className="asignaciones-list">
-                  {docente.asignaciones.map((asignacion) => (
-                    <div key={asignacion.assignment_id} className="asignacion-card">
-                      <p><strong>Curso:</strong> {asignacion.course_name}</p>
-                      <p><strong>Créditos:</strong> {asignacion.credits}</p>
-                      <p><strong>Año Académico:</strong> {asignacion.academic_year_name}</p>
-                      <p><strong>Fecha de Asignación:</strong> {new Date(asignacion.assigned_date).toLocaleDateString()}</p>
-                      <button onClick={() => handleDeleteAsignacion(asignacion.assignment_id)}>Eliminar</button>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
-          ))
-        ) : (
-          <p>No hay asignaciones registradas para el año académico seleccionado o la búsqueda actual.</p>
-        )}
-      </div>
-      {/* Botón de redirección a /informesSolicitud */}
+            {expandedDocente === docente.teacher_id && (
+              <ul className="asignaciones-list">
+                {docente.asignaciones.map((asignacion) => (
+                  <li key={asignacion.assignment_id} className="asignacion-item">
+                    <p><strong>Curso:</strong> {asignacion.course_name}</p>
+                    <p><strong>Créditos:</strong> {asignacion.credits}</p>
+                    <p><strong>Año Académico:</strong> {asignacion.academic_year_name}</p>
+                    <p><strong>Fecha de Asignación:</strong> {new Date(asignacion.assigned_date).toLocaleDateString()}</p>
+                    <button onClick={() => handleDeleteAsignacion(asignacion.assignment_id)} className="delete-button">
+                      Eliminar
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>No hay asignaciones registradas para el año académico seleccionado o la búsqueda actual.</p>
+    )}
+  </div>
+
       <div className="button-container">
         <button onClick={() => router.push('/informesSolicitud')} className="redirect-button">
           Ver Informe Completo
@@ -172,5 +181,3 @@ export default function AsignacionesDocentes() {
     </div>
   );
 }
-
-

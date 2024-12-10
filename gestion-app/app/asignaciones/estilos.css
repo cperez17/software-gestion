@@ -1,18 +1,34 @@
-/*gestion-app\app\asignaciones\estilos.css*/
+/* Variables para colores temáticos */
+:root {
+  --primary-color: #f59e0b; /* Amarillo oscuro */
+  --secondary-color: #fcd34d; /* Amarillo claro */
+  --background-color: #fff7ed; /* Fondo marfil */
+  --text-color: #4b5563; /* Gris oscuro */
+  --accent-color: #fb923c; /* Naranja vibrante */
+  --hover-color: #f97316; /* Naranja para hover */
+}
+
+/* Estructura general */
 .layout {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
   margin-top: 20px;
+  padding: 0 20px;
+  background-color: var(--background-color);
 }
 
+/* Títulos */
 h1 {
-  color: #333;
+  color: var(--primary-color);
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+/* Barra de búsqueda */
 .search-bar {
   margin-top: 20px;
   width: 100%;
@@ -24,72 +40,99 @@ h1 {
   width: 100%;
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ddd;
+  border: 1px solid #e5e7eb;
   border-radius: 5px;
+  transition: border-color 0.3s ease;
 }
 
+.search-bar input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+/* Selector de semestre */
 .semester-selector {
   margin-bottom: 20px;
   text-align: center;
 }
 
+/* Botones de semestre */
 .semester-buttons-grid {
   display: flex;
   gap: 10px;
   justify-content: center;
 }
 
-.semester-list {
-  display: flex;
-  gap: 10px;
-  list-style-type:square;
-  padding: 10;
-}
-
 .semester-button {
   padding: 10px 20px;
-  background-color: #4CAF50;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  box-shadow: 0 4px 10px rgba(251, 146, 60, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s;
 }
 
 .semester-button:hover {
-  background-color: #20ff02;
+  background-color: var(--hover-color);
+  transform: scale(1.05);
 }
 
+/* Semestre seleccionado */
 .selected-semester {
   margin-top: 20px;
   font-weight: bold;
+  color: var(--accent-color);
 }
 
+/* Botón para cambiar semestre */
 .change-semester-button {
   margin-left: 10px;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
   border: none;
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .change-semester-button:hover {
-  background-color: #0056b3;
+  background-color: var(--hover-color);
 }
 
-.docentes-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
+/* Lista de docentes */
+.docente-list {
   width: 100%;
-  max-width: 1200px;
+  max-width: 800px;
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
 }
 
+.docente-item {
+  background-color: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.docente-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+/* Tarjeta de docente */
 .docente-card {
-  background-color: #f9f9f9;
+  background-color: #fff8e1;
   padding: 20px;
   border-radius: 8px;
   width: 250px;
@@ -97,27 +140,38 @@ h1 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Botón "Ver Más" */
 .view-more-button {
-  background-color: #007bff;
+  background-color: var(--accent-color);
   color: white;
   border: none;
-  padding: 10px;
+  padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .view-more-button:hover {
-  background-color: #0056b3;
+  background-color: var(--hover-color);
 }
 
+/* Lista de asignaciones */
 .asignaciones-list {
-  margin-top: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  list-style: none;
+  padding: 10px 0;
+  margin-top: 10px;
+  border-top: 1px solid #ccc;
 }
 
+.asignacion-item {
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* Tarjeta de asignación */
 .asignacion-card {
   background-color: #fff;
   padding: 10px;
@@ -125,38 +179,79 @@ h1 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.asignacion-card p {
-  margin: 5px 0;
-}
+/* Botón de eliminar */
 .delete-button {
-  background-color: #d9534f;
+  background-color: #f87171;
   color: white;
   border: none;
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .delete-button:hover {
-  background-color: #c9302c;
+  background-color: #ef4444;
 }
 
-.button-container {
-  margin-top: 20px;
-  text-align: center;
-}
-
+/* Botón de redirección */
 .redirect-button {
-  background-color: #4a5568; /* Color del botón */
+  background-color: var(--primary-color);
   color: white;
   padding: 10px 20px;
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s;
 }
 
 .redirect-button:hover {
-  background-color: #2d3748; /* Color al hacer hover */
+  background-color: var(--hover-color);
+  transform: scale(1.05);
+}
+
+/* Selector de año académico */
+.academic-year-selector {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Dropdown de año académico */
+.academic-year-dropdown {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 300px;
+  background-color: #fffbeb;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.academic-year-dropdown:hover {
+  background-color: #fef3c7;
+}
+
+.academic-year-dropdown:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
+}
+
+/* Botón para cambiar año académico */
+.change-academic-year-button {
+  margin-left: 10px;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.change-academic-year-button:hover {
+  background-color: var(--hover-color);
 }

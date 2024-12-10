@@ -13,14 +13,14 @@ const pool = new Pool({
 export async function GET() {
     try {
         const result = await pool.query(`
-            SELECT 
+SELECT 
                 tca.assignment_id,
                 tca.course_request_id,
                 tca.teacher_id,
                 CONCAT(t.first_name, ' ', t.last_name) AS teacher_name,
                 c.course_name,
                 c.credits,
-                s.semester_name,
+                ac.semester_name,
                 tca.assigned_date
             FROM 
                 teacher_course_assignments tca
@@ -31,8 +31,7 @@ export async function GET() {
             INNER JOIN 
                 courses c ON cr.course_id = c.course_id
             INNER JOIN 
-                semesters s ON tca.semester_id = s.semester_id
-            LIMIT 10;
+                academic_year ac ON ac.academic_year_id = tca.academic_year_id
         `);
 
         return NextResponse.json(result.rows);

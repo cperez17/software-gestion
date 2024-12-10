@@ -1,5 +1,3 @@
-// gestion-app/components/navbar.tsx
-
 'use client';
 
 import React, { useState } from 'react';
@@ -14,9 +12,12 @@ export default function NavBar({ session }: { session: any }) {
   const pathname = usePathname();
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
+  // Ocultar navbar en páginas específicas
   const isLoginPage = pathname === '/login';
   const isRegisterPage = pathname === '/register';
-  if (isLoginPage || isRegisterPage) {
+  const isInformesSolicitudPage = pathname === '/informesSolicitud';
+
+  if (isLoginPage || isRegisterPage || isInformesSolicitudPage) {
     return null;
   }
 
@@ -28,50 +29,53 @@ export default function NavBar({ session }: { session: any }) {
   return (
     <nav className="navbar">
       <div className="navbar-content">
-        <span className="adminLabel">
-          {session?.user?.email} ({session?.user?.role || 'general'})
-        </span>
-
-        <div className="navLinks">
-          <div className="navGrid">
-            <Link href="/inicio" className="navButton">
-              <FaHome className="icon" />
-              <span>Inicio</span>
-            </Link>
-            <Link href="/asignaturas" className="navButton">
-              <FaBook className="icon" />
-              <span>Asignaturas</span>
-            </Link>
-            <Link href="/docentes" className="navButton">
-              <FaUser className="icon" />
-              <span>Docentes</span>
-            </Link>
-            {session?.user?.role === 'admin' && (
-              <>
-                <Link href="/solicitud" className="navButton">
-                  <FaClipboard className="icon" />
-                  <span>Solicitudes</span>
-                </Link>
-              </>
-            )}
-            <Link href="#" onClick={handleProfileClick} className="navButton">
-              <FaUser className="icon" />
-              <span>Perfil</span>
-            </Link>
-            {isPopupVisible && session && (
-              <UserPopup
-                email={session.user?.email}
-                role={session.user?.role}
-                onClose={() => setIsPopupVisible(false)}
-              />
-            )}
-          </div>
-        </div>
-
         {session ? (
-          <Logout /> // Usar componente de Logout
+          <>
+            <span className="adminLabel">
+              {session.user?.email} ({session.user?.role || 'general'})
+            </span>
+
+            <div className="navLinks">
+              <div className="navGrid">
+                <Link href="/inicio" className="navButton">
+                  <FaHome className="icon" />
+                  <span>Inicio</span>
+                </Link>
+                <Link href="/asignaturas" className="navButton">
+                  <FaBook className="icon" />
+                  <span>Asignaturas</span>
+                </Link>
+                <Link href="/docentes" className="navButton">
+                  <FaUser className="icon" />
+                  <span>Docentes</span>
+                </Link>
+                {session.user?.role === 'admin' && (
+                  <Link href="/solicitud" className="navButton">
+                    <FaClipboard className="icon" />
+                    <span>Solicitudes</span>
+                  </Link>
+                )}
+                <Link href="#" onClick={handleProfileClick} className="navButton">
+                  <FaUser className="icon" />
+                  <span>Perfil</span>
+                </Link>
+                {isPopupVisible && (
+                  <UserPopup
+                    email={session.user?.email}
+                    role={session.user?.role}
+                    onClose={() => setIsPopupVisible(false)}
+                  />
+                )}
+              </div>
+            </div>
+
+            <Logout /> {/* Usar componente de Logout */}
+          </>
         ) : (
-          <Link href="/login">Login</Link>
+          <div className="authLinks">
+            <Link href="/login" className="navButton">Login</Link>
+            <Link href="/register" className="navButton">Register</Link>
+          </div>
         )}
       </div>
     </nav>
