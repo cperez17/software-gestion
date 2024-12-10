@@ -5,7 +5,7 @@
 -- Dumped from database version 16.3
 -- Dumped by pg_dump version 16.3
 
--- Started on 2024-12-09 15:34:49
+-- Started on 2024-12-10 01:13:55
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -18,12 +18,29 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- TOC entry 2 (class 3079 OID 25810)
+-- Name: unaccent; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS unaccent WITH SCHEMA public;
+
+
+--
+-- TOC entry 4885 (class 0 OID 0)
+-- Dependencies: 2
+-- Name: EXTENSION unaccent; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- TOC entry 231 (class 1259 OID 25791)
+-- TOC entry 232 (class 1259 OID 25791)
 -- Name: academic_year; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -37,7 +54,7 @@ CREATE TABLE public.academic_year (
 ALTER TABLE public.academic_year OWNER TO postgres;
 
 --
--- TOC entry 230 (class 1259 OID 25790)
+-- TOC entry 231 (class 1259 OID 25790)
 -- Name: academic_year_year_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -53,8 +70,8 @@ CREATE SEQUENCE public.academic_year_year_id_seq
 ALTER SEQUENCE public.academic_year_year_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4878 (class 0 OID 0)
--- Dependencies: 230
+-- TOC entry 4886 (class 0 OID 0)
+-- Dependencies: 231
 -- Name: academic_year_year_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -62,7 +79,7 @@ ALTER SEQUENCE public.academic_year_year_id_seq OWNED BY public.academic_year.ac
 
 
 --
--- TOC entry 218 (class 1259 OID 17412)
+-- TOC entry 219 (class 1259 OID 17412)
 -- Name: course_requests; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -74,14 +91,14 @@ CREATE TABLE public.course_requests (
     "group" integer,
     assignment_id integer,
     academic_year_id integer,
-    CONSTRAINT course_requests_request_status_check CHECK (((request_status)::text = ANY ((ARRAY['pendiente'::character varying, 'aprobado'::character varying, 'rechazado'::character varying])::text[])))
+    CONSTRAINT course_requests_request_status_check CHECK (((request_status)::text = ANY (ARRAY['pending'::text, 'approved'::text, 'rejected'::text])))
 );
 
 
 ALTER TABLE public.course_requests OWNER TO postgres;
 
 --
--- TOC entry 227 (class 1259 OID 17555)
+-- TOC entry 228 (class 1259 OID 17555)
 -- Name: course_requests_course_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -97,8 +114,8 @@ CREATE SEQUENCE public.course_requests_course_id_seq
 ALTER SEQUENCE public.course_requests_course_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4879 (class 0 OID 0)
--- Dependencies: 227
+-- TOC entry 4887 (class 0 OID 0)
+-- Dependencies: 228
 -- Name: course_requests_course_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -106,7 +123,7 @@ ALTER SEQUENCE public.course_requests_course_id_seq OWNED BY public.course_reque
 
 
 --
--- TOC entry 217 (class 1259 OID 17411)
+-- TOC entry 218 (class 1259 OID 17411)
 -- Name: course_requests_request_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -122,8 +139,8 @@ CREATE SEQUENCE public.course_requests_request_id_seq
 ALTER SEQUENCE public.course_requests_request_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4880 (class 0 OID 0)
--- Dependencies: 217
+-- TOC entry 4888 (class 0 OID 0)
+-- Dependencies: 218
 -- Name: course_requests_request_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -131,7 +148,7 @@ ALTER SEQUENCE public.course_requests_request_id_seq OWNED BY public.course_requ
 
 
 --
--- TOC entry 220 (class 1259 OID 17431)
+-- TOC entry 221 (class 1259 OID 17431)
 -- Name: courses; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -148,7 +165,7 @@ CREATE TABLE public.courses (
 ALTER TABLE public.courses OWNER TO postgres;
 
 --
--- TOC entry 219 (class 1259 OID 17430)
+-- TOC entry 220 (class 1259 OID 17430)
 -- Name: courses_course_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -164,8 +181,8 @@ CREATE SEQUENCE public.courses_course_id_seq
 ALTER SEQUENCE public.courses_course_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4881 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 4889 (class 0 OID 0)
+-- Dependencies: 220
 -- Name: courses_course_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -173,7 +190,7 @@ ALTER SEQUENCE public.courses_course_id_seq OWNED BY public.courses.course_id;
 
 
 --
--- TOC entry 216 (class 1259 OID 17400)
+-- TOC entry 217 (class 1259 OID 17400)
 -- Name: schools; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -186,7 +203,7 @@ CREATE TABLE public.schools (
 ALTER TABLE public.schools OWNER TO postgres;
 
 --
--- TOC entry 215 (class 1259 OID 17399)
+-- TOC entry 216 (class 1259 OID 17399)
 -- Name: schools_school_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -202,8 +219,8 @@ CREATE SEQUENCE public.schools_school_id_seq
 ALTER SEQUENCE public.schools_school_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4882 (class 0 OID 0)
--- Dependencies: 215
+-- TOC entry 4890 (class 0 OID 0)
+-- Dependencies: 216
 -- Name: schools_school_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -211,7 +228,7 @@ ALTER SEQUENCE public.schools_school_id_seq OWNED BY public.schools.school_id;
 
 
 --
--- TOC entry 224 (class 1259 OID 17461)
+-- TOC entry 225 (class 1259 OID 17461)
 -- Name: semesters; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -225,7 +242,7 @@ CREATE TABLE public.semesters (
 ALTER TABLE public.semesters OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 17460)
+-- TOC entry 224 (class 1259 OID 17460)
 -- Name: semesters_semester_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -241,8 +258,8 @@ CREATE SEQUENCE public.semesters_semester_id_seq
 ALTER SEQUENCE public.semesters_semester_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4883 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 4891 (class 0 OID 0)
+-- Dependencies: 224
 -- Name: semesters_semester_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -250,7 +267,7 @@ ALTER SEQUENCE public.semesters_semester_id_seq OWNED BY public.semesters.semest
 
 
 --
--- TOC entry 226 (class 1259 OID 17474)
+-- TOC entry 227 (class 1259 OID 17474)
 -- Name: teacher_course_assignments; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -266,7 +283,7 @@ CREATE TABLE public.teacher_course_assignments (
 ALTER TABLE public.teacher_course_assignments OWNER TO postgres;
 
 --
--- TOC entry 225 (class 1259 OID 17473)
+-- TOC entry 226 (class 1259 OID 17473)
 -- Name: teacher_course_assignments_assignment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -282,8 +299,8 @@ CREATE SEQUENCE public.teacher_course_assignments_assignment_id_seq
 ALTER SEQUENCE public.teacher_course_assignments_assignment_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4884 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 4892 (class 0 OID 0)
+-- Dependencies: 226
 -- Name: teacher_course_assignments_assignment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -291,7 +308,7 @@ ALTER SEQUENCE public.teacher_course_assignments_assignment_id_seq OWNED BY publ
 
 
 --
--- TOC entry 222 (class 1259 OID 17449)
+-- TOC entry 223 (class 1259 OID 17449)
 -- Name: teachers; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -313,7 +330,7 @@ CREATE TABLE public.teachers (
 ALTER TABLE public.teachers OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 17448)
+-- TOC entry 222 (class 1259 OID 17448)
 -- Name: teachers_teacher_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -329,8 +346,8 @@ CREATE SEQUENCE public.teachers_teacher_id_seq
 ALTER SEQUENCE public.teachers_teacher_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4885 (class 0 OID 0)
--- Dependencies: 221
+-- TOC entry 4893 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: teachers_teacher_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -338,13 +355,13 @@ ALTER SEQUENCE public.teachers_teacher_id_seq OWNED BY public.teachers.teacher_i
 
 
 --
--- TOC entry 228 (class 1259 OID 17573)
+-- TOC entry 229 (class 1259 OID 17573)
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.users (
     user_id integer NOT NULL,
-    rut character varying NOT NULL,
+    email character varying NOT NULL,
     password character varying NOT NULL,
     role character varying(100)
 );
@@ -353,7 +370,7 @@ CREATE TABLE public.users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
--- TOC entry 229 (class 1259 OID 17581)
+-- TOC entry 230 (class 1259 OID 17581)
 -- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -369,8 +386,8 @@ CREATE SEQUENCE public.users_user_id_seq
 ALTER SEQUENCE public.users_user_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4886 (class 0 OID 0)
--- Dependencies: 229
+-- TOC entry 4894 (class 0 OID 0)
+-- Dependencies: 230
 -- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -378,7 +395,7 @@ ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
 
 
 --
--- TOC entry 4678 (class 2604 OID 25794)
+-- TOC entry 4685 (class 2604 OID 25794)
 -- Name: academic_year academic_year_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -386,7 +403,7 @@ ALTER TABLE ONLY public.academic_year ALTER COLUMN academic_year_id SET DEFAULT 
 
 
 --
--- TOC entry 4671 (class 2604 OID 17415)
+-- TOC entry 4678 (class 2604 OID 17415)
 -- Name: course_requests request_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -394,7 +411,7 @@ ALTER TABLE ONLY public.course_requests ALTER COLUMN request_id SET DEFAULT next
 
 
 --
--- TOC entry 4672 (class 2604 OID 17556)
+-- TOC entry 4679 (class 2604 OID 17556)
 -- Name: course_requests course_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -402,7 +419,7 @@ ALTER TABLE ONLY public.course_requests ALTER COLUMN course_id SET DEFAULT nextv
 
 
 --
--- TOC entry 4673 (class 2604 OID 17434)
+-- TOC entry 4680 (class 2604 OID 17434)
 -- Name: courses course_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -410,7 +427,7 @@ ALTER TABLE ONLY public.courses ALTER COLUMN course_id SET DEFAULT nextval('publ
 
 
 --
--- TOC entry 4670 (class 2604 OID 17403)
+-- TOC entry 4677 (class 2604 OID 17403)
 -- Name: schools school_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -418,7 +435,7 @@ ALTER TABLE ONLY public.schools ALTER COLUMN school_id SET DEFAULT nextval('publ
 
 
 --
--- TOC entry 4675 (class 2604 OID 17464)
+-- TOC entry 4682 (class 2604 OID 17464)
 -- Name: semesters semester_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -426,7 +443,7 @@ ALTER TABLE ONLY public.semesters ALTER COLUMN semester_id SET DEFAULT nextval('
 
 
 --
--- TOC entry 4676 (class 2604 OID 17477)
+-- TOC entry 4683 (class 2604 OID 17477)
 -- Name: teacher_course_assignments assignment_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -434,7 +451,7 @@ ALTER TABLE ONLY public.teacher_course_assignments ALTER COLUMN assignment_id SE
 
 
 --
--- TOC entry 4674 (class 2604 OID 17452)
+-- TOC entry 4681 (class 2604 OID 17452)
 -- Name: teachers teacher_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -442,7 +459,7 @@ ALTER TABLE ONLY public.teachers ALTER COLUMN teacher_id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 4677 (class 2604 OID 17582)
+-- TOC entry 4684 (class 2604 OID 17582)
 -- Name: users user_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -450,8 +467,8 @@ ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.u
 
 
 --
--- TOC entry 4872 (class 0 OID 25791)
--- Dependencies: 231
+-- TOC entry 4879 (class 0 OID 25791)
+-- Dependencies: 232
 -- Data for Name: academic_year; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -468,8 +485,8 @@ COPY public.academic_year (academic_year_id, year_name, semester_name) FROM stdi
 
 
 --
--- TOC entry 4859 (class 0 OID 17412)
--- Dependencies: 218
+-- TOC entry 4866 (class 0 OID 17412)
+-- Dependencies: 219
 -- Data for Name: course_requests; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -478,8 +495,8 @@ COPY public.course_requests (request_id, request_status, school_id, course_id, "
 
 
 --
--- TOC entry 4861 (class 0 OID 17431)
--- Dependencies: 220
+-- TOC entry 4868 (class 0 OID 17431)
+-- Dependencies: 221
 -- Data for Name: courses; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -544,8 +561,8 @@ COPY public.courses (course_id, course_name, credits, semester_id, code) FROM st
 
 
 --
--- TOC entry 4857 (class 0 OID 17400)
--- Dependencies: 216
+-- TOC entry 4864 (class 0 OID 17400)
+-- Dependencies: 217
 -- Data for Name: schools; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -560,8 +577,8 @@ COPY public.schools (school_id, school_name) FROM stdin;
 
 
 --
--- TOC entry 4865 (class 0 OID 17461)
--- Dependencies: 224
+-- TOC entry 4872 (class 0 OID 17461)
+-- Dependencies: 225
 -- Data for Name: semesters; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -581,8 +598,8 @@ COPY public.semesters (semester_id, semester_num, semester_name) FROM stdin;
 
 
 --
--- TOC entry 4867 (class 0 OID 17474)
--- Dependencies: 226
+-- TOC entry 4874 (class 0 OID 17474)
+-- Dependencies: 227
 -- Data for Name: teacher_course_assignments; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -591,8 +608,8 @@ COPY public.teacher_course_assignments (assignment_id, teacher_id, assigned_date
 
 
 --
--- TOC entry 4863 (class 0 OID 17449)
--- Dependencies: 222
+-- TOC entry 4870 (class 0 OID 17449)
+-- Dependencies: 223
 -- Data for Name: teachers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -635,18 +652,18 @@ COPY public.teachers (teacher_id, first_name, last_name, email, phone_number, ma
 
 
 --
--- TOC entry 4869 (class 0 OID 17573)
--- Dependencies: 228
+-- TOC entry 4876 (class 0 OID 17573)
+-- Dependencies: 229
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (user_id, rut, password, role) FROM stdin;
+COPY public.users (user_id, email, password, role) FROM stdin;
 \.
 
 
 --
--- TOC entry 4887 (class 0 OID 0)
--- Dependencies: 230
+-- TOC entry 4895 (class 0 OID 0)
+-- Dependencies: 231
 -- Name: academic_year_year_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -654,8 +671,8 @@ SELECT pg_catalog.setval('public.academic_year_year_id_seq', 1, false);
 
 
 --
--- TOC entry 4888 (class 0 OID 0)
--- Dependencies: 227
+-- TOC entry 4896 (class 0 OID 0)
+-- Dependencies: 228
 -- Name: course_requests_course_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -663,8 +680,8 @@ SELECT pg_catalog.setval('public.course_requests_course_id_seq', 5, true);
 
 
 --
--- TOC entry 4889 (class 0 OID 0)
--- Dependencies: 217
+-- TOC entry 4897 (class 0 OID 0)
+-- Dependencies: 218
 -- Name: course_requests_request_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -672,8 +689,8 @@ SELECT pg_catalog.setval('public.course_requests_request_id_seq', 1, false);
 
 
 --
--- TOC entry 4890 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 4898 (class 0 OID 0)
+-- Dependencies: 220
 -- Name: courses_course_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -681,8 +698,8 @@ SELECT pg_catalog.setval('public.courses_course_id_seq', 191, true);
 
 
 --
--- TOC entry 4891 (class 0 OID 0)
--- Dependencies: 215
+-- TOC entry 4899 (class 0 OID 0)
+-- Dependencies: 216
 -- Name: schools_school_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -690,8 +707,8 @@ SELECT pg_catalog.setval('public.schools_school_id_seq', 7, true);
 
 
 --
--- TOC entry 4892 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 4900 (class 0 OID 0)
+-- Dependencies: 224
 -- Name: semesters_semester_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -699,8 +716,8 @@ SELECT pg_catalog.setval('public.semesters_semester_id_seq', 41, true);
 
 
 --
--- TOC entry 4893 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 4901 (class 0 OID 0)
+-- Dependencies: 226
 -- Name: teacher_course_assignments_assignment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -708,8 +725,8 @@ SELECT pg_catalog.setval('public.teacher_course_assignments_assignment_id_seq', 
 
 
 --
--- TOC entry 4894 (class 0 OID 0)
--- Dependencies: 221
+-- TOC entry 4902 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: teachers_teacher_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -717,8 +734,8 @@ SELECT pg_catalog.setval('public.teachers_teacher_id_seq', 30, true);
 
 
 --
--- TOC entry 4895 (class 0 OID 0)
--- Dependencies: 229
+-- TOC entry 4903 (class 0 OID 0)
+-- Dependencies: 230
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -726,7 +743,7 @@ SELECT pg_catalog.setval('public.users_user_id_seq', 1, false);
 
 
 --
--- TOC entry 4704 (class 2606 OID 25798)
+-- TOC entry 4711 (class 2606 OID 25798)
 -- Name: academic_year academic_year_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -735,7 +752,7 @@ ALTER TABLE ONLY public.academic_year
 
 
 --
--- TOC entry 4685 (class 2606 OID 17419)
+-- TOC entry 4692 (class 2606 OID 17419)
 -- Name: course_requests course_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -744,7 +761,7 @@ ALTER TABLE ONLY public.course_requests
 
 
 --
--- TOC entry 4690 (class 2606 OID 17437)
+-- TOC entry 4697 (class 2606 OID 17437)
 -- Name: courses courses_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -753,7 +770,7 @@ ALTER TABLE ONLY public.courses
 
 
 --
--- TOC entry 4683 (class 2606 OID 17405)
+-- TOC entry 4690 (class 2606 OID 17405)
 -- Name: schools schools_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -762,7 +779,7 @@ ALTER TABLE ONLY public.schools
 
 
 --
--- TOC entry 4697 (class 2606 OID 17467)
+-- TOC entry 4704 (class 2606 OID 17467)
 -- Name: semesters semesters_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -771,7 +788,7 @@ ALTER TABLE ONLY public.semesters
 
 
 --
--- TOC entry 4700 (class 2606 OID 17479)
+-- TOC entry 4707 (class 2606 OID 17479)
 -- Name: teacher_course_assignments teacher_course_assignments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -780,7 +797,7 @@ ALTER TABLE ONLY public.teacher_course_assignments
 
 
 --
--- TOC entry 4693 (class 2606 OID 17459)
+-- TOC entry 4700 (class 2606 OID 17459)
 -- Name: teachers teachers_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -789,7 +806,7 @@ ALTER TABLE ONLY public.teachers
 
 
 --
--- TOC entry 4695 (class 2606 OID 17457)
+-- TOC entry 4702 (class 2606 OID 17457)
 -- Name: teachers teachers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -798,7 +815,7 @@ ALTER TABLE ONLY public.teachers
 
 
 --
--- TOC entry 4702 (class 2606 OID 17587)
+-- TOC entry 4709 (class 2606 OID 17587)
 -- Name: users user_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -807,7 +824,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4686 (class 1259 OID 25804)
+-- TOC entry 4693 (class 1259 OID 25804)
 -- Name: fki_academic_year_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -815,7 +832,7 @@ CREATE INDEX fki_academic_year_id ON public.course_requests USING btree (academi
 
 
 --
--- TOC entry 4687 (class 1259 OID 17572)
+-- TOC entry 4694 (class 1259 OID 17572)
 -- Name: fki_assignment_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -823,7 +840,7 @@ CREATE INDEX fki_assignment_id ON public.course_requests USING btree (assignment
 
 
 --
--- TOC entry 4688 (class 1259 OID 17566)
+-- TOC entry 4695 (class 1259 OID 17566)
 -- Name: fki_course_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -831,7 +848,7 @@ CREATE INDEX fki_course_id ON public.course_requests USING btree (course_id);
 
 
 --
--- TOC entry 4698 (class 1259 OID 25787)
+-- TOC entry 4705 (class 1259 OID 25787)
 -- Name: fki_course_request_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -839,7 +856,7 @@ CREATE INDEX fki_course_request_id ON public.teacher_course_assignments USING bt
 
 
 --
--- TOC entry 4691 (class 1259 OID 17500)
+-- TOC entry 4698 (class 1259 OID 17500)
 -- Name: fki_semester_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -847,7 +864,7 @@ CREATE INDEX fki_semester_id ON public.courses USING btree (semester_id);
 
 
 --
--- TOC entry 4705 (class 2606 OID 25799)
+-- TOC entry 4712 (class 2606 OID 25799)
 -- Name: course_requests academic_year_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -856,7 +873,7 @@ ALTER TABLE ONLY public.course_requests
 
 
 --
--- TOC entry 4710 (class 2606 OID 25805)
+-- TOC entry 4717 (class 2606 OID 25805)
 -- Name: teacher_course_assignments academic_year_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -865,7 +882,7 @@ ALTER TABLE ONLY public.teacher_course_assignments
 
 
 --
--- TOC entry 4706 (class 2606 OID 17567)
+-- TOC entry 4713 (class 2606 OID 17567)
 -- Name: course_requests assignment_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -874,7 +891,7 @@ ALTER TABLE ONLY public.course_requests
 
 
 --
--- TOC entry 4707 (class 2606 OID 17561)
+-- TOC entry 4714 (class 2606 OID 17561)
 -- Name: course_requests course_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -883,7 +900,7 @@ ALTER TABLE ONLY public.course_requests
 
 
 --
--- TOC entry 4711 (class 2606 OID 25782)
+-- TOC entry 4718 (class 2606 OID 25782)
 -- Name: teacher_course_assignments course_request_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -892,7 +909,7 @@ ALTER TABLE ONLY public.teacher_course_assignments
 
 
 --
--- TOC entry 4708 (class 2606 OID 17420)
+-- TOC entry 4715 (class 2606 OID 17420)
 -- Name: course_requests course_requests_school_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -901,7 +918,7 @@ ALTER TABLE ONLY public.course_requests
 
 
 --
--- TOC entry 4709 (class 2606 OID 17495)
+-- TOC entry 4716 (class 2606 OID 17495)
 -- Name: courses semester_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -910,7 +927,7 @@ ALTER TABLE ONLY public.courses
 
 
 --
--- TOC entry 4712 (class 2606 OID 17480)
+-- TOC entry 4719 (class 2606 OID 17480)
 -- Name: teacher_course_assignments teacher_course_assignments_teacher_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -918,7 +935,7 @@ ALTER TABLE ONLY public.teacher_course_assignments
     ADD CONSTRAINT teacher_course_assignments_teacher_id_fkey FOREIGN KEY (teacher_id) REFERENCES public.teachers(teacher_id) ON DELETE CASCADE;
 
 
--- Completed on 2024-12-09 15:34:49
+-- Completed on 2024-12-10 01:13:56
 
 --
 -- PostgreSQL database dump complete
