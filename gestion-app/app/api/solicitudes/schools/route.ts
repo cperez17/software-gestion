@@ -1,3 +1,4 @@
+//gestion-app\app\api\solicitudes\schools\route.ts
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 

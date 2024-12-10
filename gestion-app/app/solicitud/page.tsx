@@ -1,3 +1,4 @@
+//gestion-app\app\solicitud\page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -18,7 +19,7 @@ interface Solicitud {
   course_name: string;
   school_name: string;
   credits: number;
-  semester_id: number;
+  academic_year_id: number;
   group: number;
 }
 
@@ -33,10 +34,11 @@ interface School {
   school_name: string;
 }
 
-const semesterMapping: Record<string, number> = {
-  "Segundo semestre de 2024": 32,
-  "Primer semestre de 2025": 33,
-  "Segundo semestre de 2025": 34,
+const academicYearMapping: Record<string, number> = {
+  "2024 - Primer Semestre": 1,
+  "2024 - Segundo Semestre": 2,
+  "2025 - Primer Semestre": 3,
+  "2025 - Segundo Semestre": 4,
 };
 
 export default function Solicitudes() {
@@ -47,7 +49,7 @@ export default function Solicitudes() {
   const [selectedAsignatura, setSelectedAsignatura] = useState<AsignaturaSolicitada | null>(null);
   const [solicitudesInfo, setSolicitudesInfo] = useState<Solicitud[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSemester, setSelectedSemester] = useState<number | null>(null);
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState<number | null>(null);
   const [docentes, setDocentes] = useState<Docente[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
   const [selectedProfessors, setSelectedProfessors] = useState<number[]>([]);
@@ -74,12 +76,12 @@ export default function Solicitudes() {
   }, []);
 
   const fetchSolicitudes = async () => {
-    if (!selectedSemester) return;
-
+    if (!selectedAcademicYear) return;
+  
     try {
-      const response = await fetch(`/api/solicitudes?semester_id=${selectedSemester}`);
+      const response = await fetch(`/api/solicitudes?academic_year_id=${selectedAcademicYear}`);
       if (!response.ok) return;
-
+  
       const data = await response.json();
       const fetchedAsignaturas: AsignaturaSolicitada[] = data.solicitudes.map((solicitud: Solicitud) => ({
         course_code: solicitud.course_code || "",
@@ -87,30 +89,33 @@ export default function Solicitudes() {
         school_name: solicitud.school_name,
         group: solicitud.group,
       }));
-
+  
       const uniqueAsignaturas = Array.from(
         new Map(fetchedAsignaturas.map((item) => [item.course_name, item])).values()
       );
-
+  
       setAsignaturas(fetchedAsignaturas);
       setUniqueAsignaturas(uniqueAsignaturas);
     } catch (error) {
       console.error("Error al obtener las solicitudes:", error);
     }
   };
+  
 
-  const handleSemesterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selected = semesterMapping[e.target.value];
-    setSelectedSemester(selected);
+  const handleAcademicYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selected = academicYearMapping[e.target.value];
+    setSelectedAcademicYear(selected);
     if (selected) fetchSolicitudes();
   };
+  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFile(e.target.files?.[0] || null);
   };
 
   const handleFileUpload = async () => {
-    if (!file || !selectedSemester) return;
+    if (!file || !selectedAcademicYear) return;
+  
     const reader = new FileReader();
     reader.onload = async (event) => {
       const buffer = event.target?.result as ArrayBuffer;
@@ -118,7 +123,7 @@ export default function Solicitudes() {
       await workbook.xlsx.load(buffer);
       const worksheet = workbook.worksheets[0];
       const asignaturasSolicitadas: AsignaturaSolicitada[] = [];
-
+  
       worksheet.eachRow((row) => {
         const course_code = row.getCell(1).value?.toString() || "";
         const course_name = row.getCell(2).value?.toString() || "";
@@ -127,20 +132,20 @@ export default function Solicitudes() {
         const group = cellValue !== null && cellValue !== undefined ? parseInt(cellValue.toString()) : 0;
         asignaturasSolicitadas.push({ course_code, course_name, school_name, group });
       });
-
+  
       if (asignaturasSolicitadas.length === 0) {
         alert("El archivo no contiene asignaturas.");
         return;
       }
-
+  
       setAsignaturas(asignaturasSolicitadas);
-
+  
       const response = await fetch("/api/solicitudes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ asignaturas: asignaturasSolicitadas, semester_id: selectedSemester })
+        body: JSON.stringify({ asignaturas: asignaturasSolicitadas, academic_year_id: selectedAcademicYear })
       });
-
+  
       if (response.ok) {
         alert("Asignaturas cargadas correctamente.");
         fetchSolicitudes();
@@ -148,8 +153,10 @@ export default function Solicitudes() {
         alert("Error al cargar asignaturas.");
       }
     };
+  
     reader.readAsArrayBuffer(file);
   };
+  
 
   const handleProfessorSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedOptions = Array.from(e.target.selectedOptions, (option) => parseInt(option.value));
@@ -158,12 +165,12 @@ export default function Solicitudes() {
 
   const handleConfirmAssignments = async () => {
     const requestIds = solicitudesInfo.map(solicitud => solicitud.request_id);
-
+  
     if (!selectedProfessors.length || !requestIds.length) {
       alert("Selecciona al menos un profesor y asegúrate de que haya solicitudes para aprobar.");
       return;
     }
-
+  
     try {
       const response = await fetch("/api/solicitudes/asignar-profesor", {
         method: "PUT",
@@ -171,10 +178,10 @@ export default function Solicitudes() {
         body: JSON.stringify({
           request_ids: requestIds,
           teacher_ids: selectedProfessors,
-          semester_id: selectedSemester,
+          academic_year_id: selectedAcademicYear, // Actualizado aquí
         }),
       });
-
+  
       if (response.ok) {
         alert("Profesores asignados y solicitud aprobada.");
         setAsignaturas(prev => prev.filter(asignatura => asignatura.course_name !== selectedAsignatura?.course_name));
@@ -188,6 +195,7 @@ export default function Solicitudes() {
       console.error("Error al asignar profesor:", error);
     }
   };
+  
 
   const handleEdit = (solicitud: Solicitud) => {
     setEditingRequestId(solicitud.request_id);
@@ -263,28 +271,29 @@ export default function Solicitudes() {
       <h1>Gestión de Solicitudes</h1>
 
       <div className="filter-section">
-        <label htmlFor="semester-select">Seleccionar Semestre:</label>
-        <select id="semester-select" onChange={handleSemesterChange}>
-          <option value="">Selecciona un semestre</option>
-          {Object.keys(semesterMapping).map((sem) => (
-            <option key={sem} value={sem}>{sem}</option>
+      <label htmlFor="academic-year-select">Seleccionar Año Académico:</label>
+        <select id="academic-year-select" onChange={handleAcademicYearChange}>
+          <option value="">Selecciona un año académico</option>
+          {Object.keys(academicYearMapping).map((year) => (
+            <option key={year} value={year}>{year}</option>
           ))}
         </select>
 
-        {selectedSemester && (
-          <div className="file-upload-section">
-            <label htmlFor="file-upload">Subir archivo de solicitudes:</label>
-            <input id="file-upload" type="file" accept=".xlsx, .ods" onChange={handleFileChange} />
-            <button className="upload-button" onClick={handleFileUpload}>Subir Archivo</button>
-          </div>
+        {selectedAcademicYear && (
+        <div className="file-upload-section">
+          <label htmlFor="file-upload">Subir archivo de solicitudes:</label>
+          <input id="file-upload" type="file" accept=".xlsx, .ods" onChange={handleFileChange} />
+          <button className="upload-button" onClick={handleFileUpload}>Subir Archivo</button>
+        </div>
         )}
+
       </div>
 
       <button onClick={fetchSolicitudes} className="fetch-button">
         Cargar Solicitudes
       </button>
 
-      <div className="asignaturas-grid">
+      <div className="asignaturas-list">
         {uniqueAsignaturas.map((asignatura, index) => (
           <div key={index} className="asignatura-card">
             <h3>{asignatura.course_name}</h3>

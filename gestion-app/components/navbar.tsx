@@ -1,4 +1,5 @@
 // gestion-app/components/navbar.tsx
+
 'use client';
 
 import React, { useState } from 'react';
@@ -27,10 +28,9 @@ export default function NavBar({ session }: { session: any }) {
   return (
     <nav className="navbar">
       <div className="navbar-content">
-        <span className="adminLabel">Administrador</span>
-
-        {/* Mostrar email del usuario si está logueado */}
-        {session && <span className="userEmail">{session.user?.email}</span>}
+        <span className="adminLabel">
+          {session?.user?.email} ({session?.user?.role || 'general'})
+        </span>
 
         <div className="navLinks">
           <div className="navGrid">
@@ -42,22 +42,18 @@ export default function NavBar({ session }: { session: any }) {
               <FaBook className="icon" />
               <span>Asignaturas</span>
             </Link>
-            <Link href="/solicitud" className="navButton">
-              <FaClipboard className="icon" />
-              <span>Solicitudes</span>
-            </Link>
             <Link href="/docentes" className="navButton">
               <FaUser className="icon" />
               <span>Docentes</span>
             </Link>
-            <Link href="/informes" className="navButton">
-              <FaChartLine className="icon" />
-              <span>Informes</span>
-            </Link>
-            <Link href="/historico" className="navButton">
-              <FaHistory className="icon" />
-              <span>Histórico</span>
-            </Link>
+            {session?.user?.role === 'admin' && (
+              <>
+                <Link href="/solicitud" className="navButton">
+                  <FaClipboard className="icon" />
+                  <span>Solicitudes</span>
+                </Link>
+              </>
+            )}
             <Link href="#" onClick={handleProfileClick} className="navButton">
               <FaUser className="icon" />
               <span>Perfil</span>

@@ -27,8 +27,6 @@ export default function NavBar({ session }: { session: any }) {
   return (
     <nav className="navbar">
       <div className="navbar-content">
-        <span className="adminLabel">Administrador</span>
-
         {/* Mostrar email del usuario si está logueado */}
         {session ? (
           <span className="userEmail">{session.user?.email}</span>

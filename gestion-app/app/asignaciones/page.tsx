@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation';  // Importa el enrutador de Next.js
+import { useRouter } from 'next/navigation';
 import "./estilos.css";
 
 interface Asignacion {
@@ -11,7 +11,7 @@ interface Asignacion {
   teacher_name: string;
   course_name: string;
   credits: number;
-  semester_name: string;
+  academic_year_name: string;
   assigned_date: string;
 }
 
@@ -21,22 +21,23 @@ interface DocenteAsignaciones {
   asignaciones: Asignacion[];
 }
 
-const semesterMapping: Record<string, number> = {
-  "Segundo semestre de 2024": 32,
-  "Primer semestre de 2025": 33,
-  "Segundo semestre de 2025": 34,
+const academicYearMapping: Record<string, number> = {
+  "2024 - Primer Semestre": 1,
+  "2024 - Segundo Semestre": 2,
+  "2025 - Primer Semestre": 3,
+  "2025 - Segundo Semestre": 4,
 };
 
 export default function AsignacionesDocentes() {
   const [docentesAsignaciones, setDocentesAsignaciones] = useState<DocenteAsignaciones[]>([]);
-  const [selectedSemester, setSelectedSemester] = useState<number | null>(null);
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState<number | null>(null);
   const [expandedDocente, setExpandedDocente] = useState<number | null>(null);
-  const [selectedSemesterName, setSelectedSemesterName] = useState<string>("");
+  const [selectedAcademicYearName, setSelectedAcademicYearName] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const router = useRouter();  // Usa el enrutador para manejar la redirección
+  const router = useRouter();
 
-  const fetchAsignaciones = async (semesterId: number) => {
-    const res = await fetch(`/api/asignaciones?semester_id=${semesterId}`);
+  const fetchAsignaciones = async (academicYearId: number) => {
+    const res = await fetch(`/api/asignaciones?academic_year_id=${academicYearId}`);
     const data: Asignacion[] = await res.json();
 
     const groupedByDocente: { [key: number]: DocenteAsignaciones } = {};
@@ -54,10 +55,10 @@ export default function AsignacionesDocentes() {
     setDocentesAsignaciones(Object.values(groupedByDocente));
   };
 
-  const handleSemesterSelect = (semesterId: number, semesterName: string) => {
-    setSelectedSemester(semesterId);
-    setSelectedSemesterName(semesterName);
-    fetchAsignaciones(semesterId);
+  const handleAcademicYearSelect = (academicYearId: number, academicYearName: string) => {
+    setSelectedAcademicYear(academicYearId);
+    setSelectedAcademicYearName(academicYearName);
+    fetchAsignaciones(academicYearId);
   };
 
   const toggleExpand = (teacherId: number) => {
@@ -78,8 +79,8 @@ export default function AsignacionesDocentes() {
 
         if (response.ok) {
           alert("Asignación eliminada exitosamente");
-          if (selectedSemester) {
-            fetchAsignaciones(selectedSemester);
+          if (selectedAcademicYear) {
+            fetchAsignaciones(selectedAcademicYear);
           }
         } else {
           alert("Error al eliminar la asignación");
@@ -96,31 +97,31 @@ export default function AsignacionesDocentes() {
   );
 
   return (
-    <div className="layout" data-semester-selected={!!selectedSemester}>
+    <div className="layout" data-academic-year-selected={!!selectedAcademicYear}>
       <h1>Asignaciones de Docentes</h1>
 
-      <div className="semester-selector">
-        {!selectedSemester ? (
+      <div className="academic-year-selector">
+        {!selectedAcademicYear ? (
           <>
-            <h2>Selecciona un semestre:</h2>
-            <ul className="semester-list">
-              {Object.entries(semesterMapping).map(([semesterName, semesterId]) => (
-                <li key={semesterId}>
+            <h2>Selecciona un año académico:</h2>
+            <ul className="academic-year-list">
+              {Object.entries(academicYearMapping).map(([academicYearName, academicYearId]) => (
+                <li key={academicYearId}>
                   <button
-                    onClick={() => handleSemesterSelect(semesterId, semesterName)}
-                    className="semester-button"
+                    onClick={() => handleAcademicYearSelect(academicYearId, academicYearName)}
+                    className="academic-year-button"
                   >
-                    {semesterName}
+                    {academicYearName}
                   </button>
                 </li>
               ))}
             </ul>
           </>
         ) : (
-          <p className="selected-semester">
-            Semestre actual: {selectedSemesterName}
-            <button className="change-semester-button" onClick={() => setSelectedSemester(null)}>
-              Cambiar semestre
+          <p className="selected-academic-year">
+            Año Académico actual: {selectedAcademicYearName}
+            <button className="change-academic-year-button" onClick={() => setSelectedAcademicYear(null)}>
+              Cambiar año académico
             </button>
           </p>
         )}
@@ -149,8 +150,9 @@ export default function AsignacionesDocentes() {
                     <div key={asignacion.assignment_id} className="asignacion-card">
                       <p><strong>Curso:</strong> {asignacion.course_name}</p>
                       <p><strong>Créditos:</strong> {asignacion.credits}</p>
-                      <p><strong>Semestre:</strong> {asignacion.semester_name}</p>
+                      <p><strong>Año Académico:</strong> {asignacion.academic_year_name}</p>
                       <p><strong>Fecha de Asignación:</strong> {new Date(asignacion.assigned_date).toLocaleDateString()}</p>
+                      <button onClick={() => handleDeleteAsignacion(asignacion.assignment_id)}>Eliminar</button>
                     </div>
                   ))}
                 </div>
@@ -158,10 +160,9 @@ export default function AsignacionesDocentes() {
             </div>
           ))
         ) : (
-          <p>No hay asignaciones registradas para el semestre seleccionado o la búsqueda actual.</p>
+          <p>No hay asignaciones registradas para el año académico seleccionado o la búsqueda actual.</p>
         )}
       </div>
-
       {/* Botón de redirección a /informesSolicitud */}
       <div className="button-container">
         <button onClick={() => router.push('/informesSolicitud')} className="redirect-button">
@@ -171,3 +172,5 @@ export default function AsignacionesDocentes() {
     </div>
   );
 }
+
+

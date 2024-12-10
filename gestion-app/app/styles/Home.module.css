@@ -66,11 +66,11 @@
   margin: 0;
   /* Elimina el margen por defecto del h1 */
   font-weight: bold;
-  background-color: #4a93a5;
+  background-color: #d8e9f8;
 }
 
 /* Estilo del logo en el contenedor */
 .logo img {
-  opacity: 0.4;
+  opacity: 0.6;
   /* Ajusta la opacidad del logo (0 es completamente transparente, 1 es completamente opaco) */
 }

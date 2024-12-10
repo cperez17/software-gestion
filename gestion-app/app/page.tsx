@@ -16,10 +16,10 @@ export default async function main() {
       {/* Logo */}
       <div className={styles.logo}>
         <Image
-          src="/img/LOGOICOC.png"
+          src="/img/inst-obras.png"
           alt="Logo"
-          width={1000}
-          height={500}
+          width={2000}
+          height={2000}
           className={styles.logoImage}
         />
       </div>

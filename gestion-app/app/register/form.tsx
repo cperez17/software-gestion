@@ -17,6 +17,7 @@ export default function Form() {
       body: JSON.stringify({
         email: formData.get('email'),
         password: formData.get('password'),
+        role: formData.get('role'), // Agregar el rol al cuerpo de la solicitud
       }),
     });
 
@@ -36,6 +37,7 @@ export default function Form() {
         className="relative flex flex-col gap-4 w-full max-w-md p-6 bg-white bg-opacity-80 rounded-lg shadow-lg z-10"
       >
         <h1 className="text-2xl font-bold mb-4">Registrarse</h1>
+
         <label htmlFor="email" className="flex flex-col">
           <span className="text-sm font-medium mb-1">Email</span>
           <input
@@ -47,6 +49,7 @@ export default function Form() {
             placeholder="Ingresar Email"
           />
         </label>
+
         <label htmlFor="password" className="flex flex-col">
           <span className="text-sm font-medium mb-1">Contraseña</span>
           <input
@@ -58,11 +61,26 @@ export default function Form() {
             placeholder="Ingresar contraseña"
           />
         </label>
+
+        <label htmlFor="role" className="flex flex-col">
+          <span className="text-sm font-medium mb-1">Rol</span>
+          <select
+            id="role"
+            name="role"
+            className="border border-gray-300 rounded px-3 py-2 text-black"
+            required
+          >
+            <option value="">Seleccionar rol</option>
+            <option value="admin">Admin</option>
+            <option value="general">General</option>
+          </select>
+        </label>
+
         <button
           type="submit"
           className="bg-green-500 text-white rounded px-4 py-2 hover:bg-green-600 transition"
         >
-          Register
+          Registrarse
         </button>
       </form>
     </div>

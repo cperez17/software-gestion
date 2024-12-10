@@ -17,10 +17,10 @@ export default async function inicio() {
       {/* Logo */}
       <div className={styles.logo}>
         <Image
-          src="/img/LogoICOC.png" // Ruta desde la carpeta public
+          src="/img/inst-obras.png" // Ruta desde la carpeta public
           alt="Logo"
-          width={1000}
-          height={500}
+          width={2000}
+          height={2000}
           className={styles.logoImage}
         />
       </div>

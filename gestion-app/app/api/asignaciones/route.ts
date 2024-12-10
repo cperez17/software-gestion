@@ -13,7 +13,7 @@ const pool = new Pool({
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const semester_id = url.searchParams.get('semester_id');
+  const academic_year_id = url.searchParams.get('academic_year_id');
 
   try {
     const result = await pool.query(`
@@ -24,7 +24,7 @@ export async function GET(request: Request) {
         t.teacher_id,
         c.course_name,
         c.credits,
-        s.semester_name,
+        ay.year_name AS academic_year_name,
         tca.assigned_date
       FROM 
         teacher_course_assignments AS tca
@@ -35,9 +35,9 @@ export async function GET(request: Request) {
       JOIN 
         courses AS c ON cr.course_id = c.course_id
       JOIN 
-        semesters AS s ON tca.semester_id = s.semester_id
+        academic_year AS ay ON tca.academic_year_id = ay.academic_year_id
       WHERE 
-        ${semester_id ? `s.semester_id = ${semester_id}` : "1=1"}
+        ${academic_year_id ? `tca.academic_year_id = ${academic_year_id}` : "1=1"}
     `);
 
     return NextResponse.json(result.rows, { status: 200 });
@@ -49,34 +49,34 @@ export async function GET(request: Request) {
 
 
 
+
 export async function POST(request: Request) {
   const { assignment_id } = await request.json();
 
   try {
-    // Paso 1: Cambiar el estado en `course_requests` a "pending"
-    const updateResult = await pool.query(`
-      UPDATE course_requests 
-      SET request_status = 'pending' 
-      WHERE assignment_id = $1
-    `, [assignment_id]);
-
-    if (updateResult.rowCount === 0) {
-      return NextResponse.json({ error: "No se encontró una solicitud de curso con el ID proporcionado" }, { status: 404 });
-    }
+    // Paso 1: Eliminar la referencia en `course_requests` estableciendo `assignment_id` a NULL
+    await pool.query(
+      `UPDATE course_requests
+       SET assignment_id = NULL, request_status = 'pending'
+       WHERE assignment_id = $1`,
+      [assignment_id]
+    );
 
     // Paso 2: Eliminar la asignación en `teacher_course_assignments`
-    const deleteResult = await pool.query(`
-      DELETE FROM teacher_course_assignments
-      WHERE assignment_id = $1
-    `, [assignment_id]);
+    const deleteResult = await pool.query(
+      `DELETE FROM teacher_course_assignments
+       WHERE assignment_id = $1`,
+      [assignment_id]
+    );
 
     if (deleteResult.rowCount === 0) {
-      return NextResponse.json({ error: "No se encontró una asignación en teacher_course_assignments para eliminar" }, { status: 404 });
+      return NextResponse.json({ error: "No se encontró una asignación para eliminar" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: "Asignación eliminada y estado actualizado a pending" });
+    return NextResponse.json({ message: "Asignación eliminada y estado actualizado a pending" }, { status: 200 });
   } catch (error) {
     console.error("Error al eliminar la asignación:", error);
     return NextResponse.json({ error: "Error al eliminar la asignación" }, { status: 500 });
   }
 }
+
