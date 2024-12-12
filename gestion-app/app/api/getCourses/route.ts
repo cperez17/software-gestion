@@ -21,9 +21,7 @@ SELECT
                 c.course_name,
                 c.credits,
                 ac.semester_name,
-                tca.assigned_date,
-                c.code
-
+                tca.assigned_date
             FROM 
                 teacher_course_assignments tca
             INNER JOIN 
