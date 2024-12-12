@@ -23,6 +23,7 @@ export default function Asignaturas() {
   const [semestres, setSemestres] = useState<Semestre[]>([]); // Nuevo estado para los semestres
   const [selectedAsignatura, setSelectedAsignatura] = useState<Asignatura | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModal2Open, setIsModal2Open] = useState<boolean>(false);
   const [newAsignatura, setNewAsignatura] = useState<Asignatura>({
     course_id: 0,
     course_name: '',
@@ -55,6 +56,7 @@ export default function Asignaturas() {
   }, []);
 
   const handleVerInformacion = (asignatura: Asignatura) => {
+    setIsModal2Open(true);
     setSelectedAsignatura(asignatura);
     setIsEditing(false); // Resetear el estado de edición al ver información
   };
@@ -75,6 +77,7 @@ export default function Asignaturas() {
 
   const handleClose = () => {
     setSelectedAsignatura(null);
+    setIsModal2Open(false);
   };
 
   const handleAgregarAsignatura = () => {
@@ -183,7 +186,7 @@ const handleDelete = async (id: number) => {
 
   return (
     
-    <div className="layout asignaturas-page">
+    <div className="main-layout">
       {/* Filtro por semestre */}
       <label htmlFor="semester-filter">Filtrar por Semestre:</label>
       <select id="semester-filter" className="filter-select" onChange={handleFilterChange}>
@@ -201,9 +204,9 @@ const handleDelete = async (id: number) => {
     Agregar Asignatura
   </button>
   
-  <ul className="asignaturas-list">
+  <ul className="main-asignaturas-list">
     {filteredAsignaturas.map((asignatura) => (
-      <li key={asignatura.course_id} className="asignatura-item">
+      <li key={asignatura.course_id} className="main-asignaturas-card">
         <span className="asignatura-info">
           {asignatura.course_name} - {asignatura.code} - Créditos: {asignatura.credits}
         </span>
@@ -276,31 +279,31 @@ const handleDelete = async (id: number) => {
   </div>
 )}
 
-
-{/* Información Detallada de la Asignatura */}
-<div className="details">
-  {selectedAsignatura && (
-    <div className="details-card">
-      <h2 className="details-title">Información de {selectedAsignatura.course_name}</h2>
-      <p>Código: {selectedAsignatura.code}</p>
-      <p>Créditos: {selectedAsignatura.credits}</p>
-      <p>Semestre: {semestres.find(semester => semester.semester_id === selectedAsignatura.semester_id)?.semester_name}</p>
-      <div className="details-menu">
-        <button
-          className="details-button"
-          onClick={() => handleDelete(selectedAsignatura.course_id)}
-        >
-          Eliminar 
-        </button>
-        
-        <button className="details-button" onClick={handleClose}>
-          Cerrar
-        </button>
+      {/* Información Detallada de la Asignatura */}
+      {isModal2Open && (
+      <div className="modal">
+        {selectedAsignatura && (
+          <div className="details-card">
+            <h2 className="details-title">Información de {selectedAsignatura.course_name}</h2>
+            <p>Código: {selectedAsignatura.code}</p>
+            <p>Créditos: {selectedAsignatura.credits}</p>
+            <p>Semestre: {semestres.find(semester => semester.semester_id === selectedAsignatura.semester_id)?.semester_name}</p>
+            <div className="details-menu">
+              <button
+                className="details-button"
+                onClick={() => handleDelete(selectedAsignatura.course_id)}
+              >
+                Eliminar 
+              </button>
+              
+              <button className="details-button" onClick={handleClose}>
+                Cerrar
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  )}
-</div>
-
-    </div>
+      )}
+  </div>
   );
 }

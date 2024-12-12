@@ -1,24 +1,29 @@
 import { chromium } from 'playwright';
 
 export async function POST(req: Request) {
-    const browser = await chromium.launch();
-    const page = await browser.newPage();
-    const host = req.headers.get('host');
+  const urlParams = new URL(req.url).searchParams;
+  const teacher = urlParams.get('teacher') || '';
+  const academicYear = urlParams.get('academicYear') || '';
 
-    // Añade los parámetros `?pdf=true&hideButton=true` en la URL
-    await page.goto(`http://${host}/informesSolicitud?pdf=true&hideButton=true`, { waitUntil: 'networkidle' });
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  const host = req.headers.get('host');
 
-    const pdfBuffer = await page.pdf({
-        format: 'A4',
-        printBackground: true,
-    });
+  // Construir la URL con los filtros aplicados
+  const url = `http://${host}/informesSolicitud?pdf=true&hideButton=true&teacher=${teacher}&academicYear=${academicYear}`;
+  await page.goto(url, { waitUntil: 'networkidle' });
 
-    await browser.close();
+  const pdfBuffer = await page.pdf({
+    format: 'A4',
+    printBackground: false,
+  });
 
-    return new Response(pdfBuffer, {
-        headers: {
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': 'attachment; filename="informe.pdf"',
-        },
-    });
+  await browser.close();
+
+  return new Response(pdfBuffer, {
+    headers: {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename="informe.pdf"',
+    },
+  });
 }

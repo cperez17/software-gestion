@@ -16,9 +16,9 @@ export async function POST(request: Request) {
   console.log("Nombre del curso recibido:", course_name);
 
   try {
-    // Consulta para obtener todas las solicitudes relacionadas con el nombre del curso, sin filtrar por grupo
+    // Consulta actualizada para incluir el campo 'code' de la tabla 'courses'
     const res = await pool.query(
-      `SELECT cr.request_id, s.school_name, c.credits, cr.group
+      `SELECT cr.request_id, s.school_name, c.credits, cr.group, c.code
        FROM course_requests cr
        JOIN schools s ON cr.school_id = s.school_id
        JOIN courses c ON cr.course_id = c.course_id
@@ -38,3 +38,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Error al obtener información de solicitudes" }, { status: 500 });
   }
 }
+

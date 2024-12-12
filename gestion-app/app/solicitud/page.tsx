@@ -5,6 +5,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import ExcelJS from "exceljs";
 import "./estilos.css";
+import academicYearMapping from "../../config/semestres.json";
+
+
+type AcademicYearMapping = Record<string, number>;
+const mapping: AcademicYearMapping = academicYearMapping;
 
 interface AsignaturaSolicitada {
   course_code: string;
@@ -13,15 +18,17 @@ interface AsignaturaSolicitada {
   group: number;
 }
 
+
 interface Solicitud {
   request_id: number;
-  course_code: string;
+  code: string;           // Agregar 'code' aquí
   course_name: string;
   school_name: string;
   credits: number;
   academic_year_id: number;
   group: number;
 }
+
 
 interface Docente {
   teacher_id: number;
@@ -33,13 +40,6 @@ interface School {
   school_id: number;
   school_name: string;
 }
-
-const academicYearMapping: Record<string, number> = {
-  "2024 - Primer Semestre": 1,
-  "2024 - Segundo Semestre": 2,
-  "2025 - Primer Semestre": 3,
-  "2025 - Segundo Semestre": 4,
-};
 
 export default function Solicitudes() {
   const router = useRouter();
@@ -84,11 +84,12 @@ export default function Solicitudes() {
   
       const data = await response.json();
       const fetchedAsignaturas: AsignaturaSolicitada[] = data.solicitudes.map((solicitud: Solicitud) => ({
-        course_code: solicitud.course_code || "",
+        course_code: solicitud.code || "",  // Aquí tomamos 'solicitud.code'
         course_name: solicitud.course_name,
         school_name: solicitud.school_name,
         group: solicitud.group,
       }));
+      
   
       const uniqueAsignaturas = Array.from(
         new Map(fetchedAsignaturas.map((item) => [item.course_name, item])).values()
@@ -101,9 +102,10 @@ export default function Solicitudes() {
     }
   };
   
+  
 
   const handleAcademicYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selected = academicYearMapping[e.target.value];
+    const selected = mapping[e.target.value];
     setSelectedAcademicYear(selected);
     if (selected) fetchSolicitudes();
   };
@@ -240,7 +242,7 @@ export default function Solicitudes() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ course_name: asignatura.course_name })
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         setSolicitudesInfo(data.solicitudes || []);
@@ -254,6 +256,7 @@ export default function Solicitudes() {
       setSolicitudesInfo([]);
     }
   };
+  
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -267,13 +270,13 @@ export default function Solicitudes() {
   };
 
   return (
-    <div className="layout">
+    <div className="solicitud-layout">
       <h1>Gestión de Solicitudes</h1>
 
       <div className="filter-section">
-      <label htmlFor="academic-year-select">Seleccionar Año Académico:</label>
+      <label htmlFor="academic-year-select">Seleccionar semestre:</label>
         <select id="academic-year-select" onChange={handleAcademicYearChange}>
-          <option value="">Selecciona un año académico</option>
+          <option value="">Selecciona un semestre</option>
           {Object.keys(academicYearMapping).map((year) => (
             <option key={year} value={year}>{year}</option>
           ))}
@@ -286,18 +289,18 @@ export default function Solicitudes() {
           <button className="upload-button" onClick={handleFileUpload}>Subir Archivo</button>
         </div>
         )}
-
+        <button onClick={fetchSolicitudes} className="loadsol-button">
+          Cargar Solicitudes
+        </button>
       </div>
 
-      <button onClick={fetchSolicitudes} className="info-button">
-        Cargar Solicitudes
-      </button>
+
 
       <div className="asignaturas-list">
         {uniqueAsignaturas.map((asignatura, index) => (
           <div key={index} className="asignatura-card">
-            <h3>{asignatura.course_name}</h3>
-            <button className="info-button" onClick={() => handleVerInfo(asignatura)}>Ver Información</button>
+            <h3>{asignatura.course_code} - {asignatura.course_name}</h3>
+            <button className="loadsol-button" onClick={() => handleVerInfo(asignatura)}>Ver Información</button>
           </div>
         ))}
       </div>
@@ -375,10 +378,12 @@ export default function Solicitudes() {
                 </option>
               ))}
             </select>
-            <button className="confirm-btn" onClick={handleConfirmAssignments}>
-              Confirmar Asignación
-            </button>
-            <button className="close-button" onClick={handleCloseModal}>Cerrar</button>
+            <div className= "grid">
+              <button className="confirm-btn" onClick={handleConfirmAssignments}>
+                Confirmar Asignación
+              </button>
+              <button className="close-button" onClick={handleCloseModal}>Cerrar</button>
+            </div>
           </div>
         </div>
       )}

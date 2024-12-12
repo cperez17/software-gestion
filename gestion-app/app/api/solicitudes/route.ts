@@ -53,8 +53,8 @@ export async function POST(request: Request) {
       // Verificar si ya existe una solicitud con los mismos parámetros
       const existingRequest = await pool.query(
         `SELECT request_status FROM course_requests
-         WHERE course_id = $1 AND school_id = $2 AND "group" = $3`,
-        [course_id, school_id, group]
+         WHERE course_id = $1 AND school_id = $2 AND "group" = $3 AND academic_year_id = $4`,
+        [course_id, school_id, group, academic_year_id]
       );
 
       if (existingRequest.rows.length > 0) {
@@ -62,8 +62,8 @@ export async function POST(request: Request) {
         await pool.query(
           `UPDATE course_requests 
            SET request_status = $1
-           WHERE course_id = $2 AND school_id = $3 AND "group" = $4`,
-          [currentStatus, course_id, school_id, group]
+           WHERE course_id = $2 AND school_id = $3 AND "group" = $4 AND academic_year_id = $5`,
+          [currentStatus, course_id, school_id, group, academic_year_id]
         );
         console.log(`Solicitud existente actualizada sin cambiar el estado: ${currentStatus}`);
       } else {
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
            VALUES ($1, $2, 'pending', $3, NULL, $4)`,
           [course_id, school_id, group, academic_year_id]
         );
-        console.log(`Nueva solicitud insertada: course_id=${course_id}, school_id=${school_id}, group=${group}`);
+        console.log(`Nueva solicitud insertada: course_id=${course_id}, school_id=${school_id}, group=${group}, academic_year_id=${academic_year_id}`);
       }
     }
 
@@ -95,14 +95,21 @@ export async function GET(request: Request) {
 
   try {
     const result = await pool.query(
-      `SELECT cr.request_id, c.course_id, c.course_name, s.school_name, cr.group, cr.request_status, c.credits
+      `SELECT 
+         cr.request_id, 
+         c.course_id, 
+         c.code, 
+         c.course_name, 
+         s.school_name, 
+         cr.group, 
+         cr.request_status, 
+         c.credits
        FROM course_requests cr
        JOIN courses c ON cr.course_id = c.course_id
        JOIN schools s ON cr.school_id = s.school_id
        WHERE cr.academic_year_id = $1 AND cr.request_status = 'pending'`,
       [academic_year_id]
     );
-    
 
     return NextResponse.json({ solicitudes: result.rows }, { status: 200 });
   } catch (error) {
