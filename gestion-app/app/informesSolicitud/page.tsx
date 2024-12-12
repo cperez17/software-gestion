@@ -5,6 +5,7 @@ import styles from '../styles/informeSolicitud.css';
 
 interface Assignment {
     course_name: string;
+    code: string;
     credits: number;
     semester_name: string;
     assigned_date: string;
@@ -25,6 +26,7 @@ const TeacherSection: React.FC<TeacherAssignmentsData> = ({ teacher_name, assign
             <thead>
                 <tr>
                     <th className='header'>Curso</th>
+                    <th className='header'>Code</th>
                     <th className='header'>Créditos</th>
                     <th className='header'>Semestre</th>
                     <th className='header'>Fecha de Asignación</th>
@@ -34,6 +36,7 @@ const TeacherSection: React.FC<TeacherAssignmentsData> = ({ teacher_name, assign
                 {assignments.map((assignment, index) => (
                     <tr key={index}>
                         <td className='cell'>{assignment.course_name}</td>
+                        <td className='cell'>{assignment.code}</td>
                         <td className='cell'>{assignment.credits}</td>
                         <td className='cell'>{assignment.semester_name}</td>
                         <td className='cell'>{new Date(assignment.assigned_date).toLocaleDateString()}</td>
@@ -47,7 +50,8 @@ const TeacherSection: React.FC<TeacherAssignmentsData> = ({ teacher_name, assign
 const InformeSolicitud: React.FC = () => {
     const [teachersAssignmentsData, setTeachersAssignmentsData] = useState<TeacherAssignmentsData[]>([]);
     const [hideButton, setHideButton] = useState(false);
-
+    const [selectedTeachers, setSelectedTeachers] = useState<number[]>([]);
+    const [selectedTeacherId, setSelectedTeacherId] = useState<number | ''>('');
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         setHideButton(urlParams.get('hideButton') === 'true');
@@ -59,6 +63,7 @@ const InformeSolicitud: React.FC = () => {
                     teacher_id: number;
                     teacher_name: string;
                     course_name: string;
+                    code: string;
                     credits: number;
                     semester_name: string;
                     assigned_date: string;
@@ -87,6 +92,7 @@ const InformeSolicitud: React.FC = () => {
         fetchAssignments();
     }, []);
 
+
     const handleGeneratePDF = async () => {
         try {
             const res = await fetch('/api/generatePDF', {
@@ -110,16 +116,32 @@ const InformeSolicitud: React.FC = () => {
         }
     };
 
+    const handleTeacherSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = event.target.value;
+        setSelectedTeacherId(value ? parseInt(value) : ''); // Guardar el ID del profesor seleccionado
+    };
+
+    const filteredTeachersData = selectedTeacherId
+        ? teachersAssignmentsData.filter(teacher => teacher.teacher_id === selectedTeacherId)
+        : teachersAssignmentsData;
+
     return (
         <div className='container'>
-            {teachersAssignmentsData.map((teacherData) => (
+            {filteredTeachersData.map((teacherData) => (
                 <TeacherSection key={teacherData.teacher_id} {...teacherData} />
             ))}
             {!hideButton && (
                 <button onClick={handleGeneratePDF} className={styles.button}>Generar PDF</button>
             )}
+            <select onChange={handleTeacherSelect} className='Dropdown' value={selectedTeacherId}>
+                <option value="">Seleccionar profesor</option>
+                {teachersAssignmentsData.map(teacher => (
+                    <option key={teacher.teacher_id} value={teacher.teacher_id}>
+                        {teacher.teacher_name}
+                    </option>
+                ))}
+            </select>
         </div>
     );
 };
-
 export default InformeSolicitud;
