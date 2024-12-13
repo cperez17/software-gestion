@@ -12,7 +12,7 @@ services:
       - "4004:5432" # Mapea el puerto 4004 del host al puerto 5432 del contenedor
     volumes: 
       - postgres_data:/var/lib/postgresql/data # Persistencia de datos
-      - ./backupf.sql:/docker-entrypoint-initdb.d/backupf.sql # Monta el backup.sql
+      - ./backup_f.sql:/docker-entrypoint-initdb.d/backupf.sql # Monta el backup.sql
   nextapp:
     container_name: nextapp
     build: .
