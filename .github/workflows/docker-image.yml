@@ -32,7 +32,7 @@ jobs:
       working-directory: gestion-app
       run: |
         pip install selenium webdriver-manager
-        python3 prueba_login.py
+        python3 test_login.py
 
     - name: Stop containers
       working-directory: gestion-app
