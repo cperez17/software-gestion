@@ -4,21 +4,20 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 
-# Configurar opciones de Chrome sin --user-data-dir
+# Configurar Chrome en modo headless para entorno CI
 options = webdriver.ChromeOptions()
-options.add_argument("--start-maximized")
+options.add_argument("--headless")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--disable-gpu")
 
-# Inicializar Chrome
+# Inicializar el navegador
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 try:
-    # Ir al sitio
-    driver.get("http://localhost:3004/")
-    time.sleep(1)
+    # Ir a la página de login
     driver.get("http://localhost:3004/login")
-    time.sleep(1)
+    time.sleep(2)  # Dar tiempo a que cargue
 
     # Ingresar credenciales
     driver.find_element(By.NAME, "email").send_keys("admin1@uach.cl")
@@ -27,12 +26,16 @@ try:
     # Clic en el botón de login
     driver.find_element(By.XPATH, "//button[contains(text(), 'Login')]").click()
 
-    # Esperar unos segundos para cargar la página
+    # Esperar redirección o carga
     time.sleep(3)
-    print("✅ Prueba de login completada")
+
+    # Validar que el login fue exitoso
+    assert "dashboard" in driver.current_url.lower() or "logout" in driver.page_source.lower() or "bienvenido" in driver.page_source.lower()
+
+    print("✅ Prueba de login completada con éxito")
 
 except Exception as e:
-    print(f"❌ Error en la prueba: {e}")
+    print(f"❌ Error en la prueba de login: {e}")
 
 finally:
     driver.quit()
