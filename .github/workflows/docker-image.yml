@@ -37,8 +37,3 @@ jobs:
     - name: Stop containers
       working-directory: gestion-app
       run: docker compose down
-
-
-    - name: Stop containers
-      working-directory: gestion-app
-      run: docker-compose down
