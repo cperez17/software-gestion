@@ -3,7 +3,7 @@ name: Build and Test Docker App
 on:
   push:
     branches:
-      - main  # O la rama que usen como principal
+      - main
 
 jobs:
   build:
@@ -15,6 +15,11 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
     - name: Build docker-compose services
       working-directory: gestion-app
@@ -28,6 +33,11 @@ jobs:
       run: |
         pip install selenium webdriver-manager
         python3 prueba_login.py
+
+    - name: Stop containers
+      working-directory: gestion-app
+      run: docker-compose down
+
 
     - name: Stop containers
       working-directory: gestion-app
