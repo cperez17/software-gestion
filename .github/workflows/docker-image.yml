@@ -3,7 +3,7 @@ name: Build and Test Docker App
 on:
   push:
     branches:
-      - main
+      - main  # O la rama que usen como principal
 
 jobs:
   build:
@@ -19,11 +19,11 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.x'
 
     - name: Build docker-compose services
       working-directory: gestion-app
-      run: docker-compose up -d --build
+      run: docker compose up -d --build
 
     - name: Wait for services to initialize
       run: sleep 10
@@ -36,7 +36,7 @@ jobs:
 
     - name: Stop containers
       working-directory: gestion-app
-      run: docker-compose down
+      run: docker compose down
 
 
     - name: Stop containers
