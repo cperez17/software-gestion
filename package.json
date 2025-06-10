@@ -1,5 +1,25 @@
 {
   "dependencies": {
-    "navigation": "^6.2.0"
-  }
+    "navigation": "^6.2.0",
+    "selenium-webdriver": "^4.30.0"
+  },
+  "name": "software-gestion",
+  "version": "1.0.0",
+  "description": "Ejecutar \"docker -compose up --build\" en la carpeta gestion-app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cperez17/software-gestion.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/cperez17/software-gestion/issues"
+  },
+  "homepage": "https://github.com/cperez17/software-gestion#readme"
 }

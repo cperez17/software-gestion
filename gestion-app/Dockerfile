@@ -18,4 +18,4 @@ RUN npm run build
 
 EXPOSE 3004
 
-CMD ["npm", "start", "--host=3004"]
+CMD ["npm", "start"]
