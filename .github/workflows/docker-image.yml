@@ -3,7 +3,7 @@ name: Build and Test Docker App
 on:
   push:
     branches:
-      - main
+      - main  # O la rama que usen como principal
 
 jobs:
   build:
@@ -21,23 +21,14 @@ jobs:
       with:
         python-version: '3.x'
 
-    - name: Install Chrome dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y wget gnupg unzip xvfb libxi6 libgconf-2-4 \
-            libnss3 libxss1 libappindicator1 libindicator7 libgbm-dev
-
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -f install -y
-
-    - name: Build and start Docker services
+    - name: Build docker-compose services
       working-directory: gestion-app
       run: docker compose up -d --build
 
     - name: Wait for services to initialize
       run: sleep 10
 
-    - name: Install test dependencies and run Selenium test
+    - name: Run Selenium test
       working-directory: gestion-app
       run: |
         pip install selenium webdriver-manager
@@ -47,3 +38,7 @@ jobs:
       working-directory: gestion-app
       run: docker compose down
 
+
+    - name: Stop containers
+      working-directory: gestion-app
+      run: docker-compose down
