@@ -3,8 +3,7 @@ name: Build and Test Docker App
 on:
   push:
     branches:
-      - main  # O la rama que usen como principal
-
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
