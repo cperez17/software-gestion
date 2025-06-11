@@ -40,5 +40,3 @@ except Exception as e:
     print(f"❌ Error en la prueba: {e}")
 finally:
     driver.quit()
-
-
